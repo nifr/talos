@@ -1,4 +1,4 @@
 {
   "name": "Talos Cluster",
-  "image": "ghcr.io/nifr/talos/devcontainer:latest"
+  "image": "ghcr.io/nifr/talos:latest"
 }
