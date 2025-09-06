@@ -18,6 +18,8 @@ disabled = true
 disabled =  true
 [package]
 disabled = true
+[pulumi]
+disabled = true
 
 [custom.term_program]
 command = 'echo -n "${TERM_PROGRAM:-xTerm}"'
