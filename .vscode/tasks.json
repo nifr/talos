@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker:buildx bake",
+      "hide": false,
+      "command": "docker",
+      "args": [
+        "buildx",
+        "bake",
+        "--allow=security.insecure",
+        "--progress=plain",
+        "${input:buildx-target}",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/.devcontainer/talos"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "echo": false,
+        "reveal": "never",
+        "group": "docker:bake",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true,
+      },
+    },
+  ],
+  "inputs": [
+    {
+        "id": "buildx-target",
+        "description": "Buildx target:",
+        "type": "promptString",
+        "default": "talos"
+    }
+  ] 
+}
