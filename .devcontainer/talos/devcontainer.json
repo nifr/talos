@@ -27,6 +27,12 @@
       "documentationUrl": "https://github.com/settings/tokens"
     }
   },
+  "hostRequirements": {
+		"cpus": 4,
+		"memory": "15gb",
+		"storage": "32gb",
+		"gpu": "optional"
+	},
   "customizations": {
     "codespaces": {
       "repositories": {
