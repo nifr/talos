@@ -14,3 +14,18 @@ graph TD
     F --> G[devcontainer]
     G --> H[talos]
 ```
+
+## Pulumi
+
+```bash
+bun install
+pulumi login
+pulumi up
+pulumi stack output --json
+pulumi destroy
+```
+
+## Hetzner Cloud
+
+* Pulumi: [HCloud Provider](https://www.pulumi.com/registry/packages/hcloud/)
+* https://github.com/apricote/hcloud-upload-image
