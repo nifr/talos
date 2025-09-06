@@ -3,7 +3,8 @@
   "image": "ghcr.io/nifr/talos:latest",
   "overrideCommand": true,
   "runArgs": [
-    "--hostname=talos"
+    "--hostname=talos",
+    "--privileged"
   ],
   "features": {
     "ghcr.io/devcontainers/features/git:1": {
