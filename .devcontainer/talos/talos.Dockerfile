@@ -35,7 +35,8 @@ ENV _devccontainer_metadata_to_add='[{ \
   "customizations": { \
     "vscode": { \
       "extensions": [ \
-        "editorconfig.editorconfig" \
+        "editorconfig.editorconfig", \
+        "MermaidChart.vscode-mermaid-chart" \
       ], \
       "settings": { \
 \
