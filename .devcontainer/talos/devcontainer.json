@@ -12,5 +12,19 @@
     "./features/talosctl": {
       "version": "1.11.0"
     }
+  },
+  "mounts": [
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/GH_TOKEN",
+      "target": "/run/secrets/GH_TOKEN"
+    }
+  ],
+  "secrets": {
+    "GH_TOKEN": {
+      "description": "(required) Personal Access Token (PAT), used by GitHub CLI \"gh\"",
+      "documentationUrl": "https://github.com/settings/tokens"
+    }
+  },
   }
 }
