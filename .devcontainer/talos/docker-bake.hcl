@@ -48,10 +48,18 @@ target "docker" {
   }
 }
 
+target "javascript" {
+  dockerfile = "javascript.Dockerfile"
+  contexts = {
+    "base" = "target:docker"
+    "npm-config" = "./javascript/npm-config"
+  }
+}
+
 target "devcontainer" {
   dockerfile = "devcontainer.Dockerfile"
   contexts = {
-    base = "target:docker"
+    base = "target:javascript"
     build-context = "./devcontainer"
   }
 }
