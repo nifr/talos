@@ -29,3 +29,9 @@ pulumi destroy
 
 * Pulumi: [HCloud Provider](https://www.pulumi.com/registry/packages/hcloud/)
 * https://github.com/apricote/hcloud-upload-image
+
+## Woot? So much codez?
+
+```bash
+pkgx tokei --no-ignore-dot --hidden
+```
