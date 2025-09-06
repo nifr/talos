@@ -1,0 +1,10 @@
+name: talos
+description: Talos cluster on Hetzner Cloud.
+runtime:
+  name: nodejs
+  options:
+    packagemanager: bun
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: typescript
