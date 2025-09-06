@@ -321,4 +321,23 @@ SETUP_RIPGREP
 
 # rg --hidden --no-ignore --iglob='!.git/' --smart-case --iglob='!*.js.map' --files-with-matches [..]
 
+ARG TARGETARCH
+ARG atuin_version='18.8.0'
+ARG atuin_architecture="${TARGETARCH/arm64/aarch64}"
+ARG atuin_architecture="${atuin_architecture/amd64/x86_64}"
+ARG atuin_download_url="https://github.com/atuinsh/atuin/releases/download/v${atuin_version}/atuin-${atuin_architecture}-unknown-linux-gnu.tar.gz"
+## example url: https://github.com/atuinsh/atuin/releases/download/v18.8.0/atuin-aarch64-unknown-linux-gnu.tar.gz
+RUN \
+<<'INSTALL_ATUIN'
+echo '=== [atuin] download and install ...'
+printf '=== [atuin] download url: %s\n' "${atuin_download_url}"
+curl -sLo- "${atuin_download_url}" \
+| tar -xzf- --to-stdout --strip-components=1 "atuin-${atuin_architecture}-unknown-linux-gnu/atuin" \
+| install --mode=755 /dev/stdin /usr/local/bin/atuin
+
+echo '=== [atuin] print version'
+atuin --version
+echo '=== [atuin] installation complete.'
+INSTALL_ATUIN
+
 ENV TERMINFO_DIRS='/etc/terminfo:/lib/terminfo:/usr/share/terminfo'
