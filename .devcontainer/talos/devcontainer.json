@@ -1,4 +1,16 @@
 {
-  "name": "Talos Cluster",
-  "image": "ghcr.io/nifr/talos:latest"
+  "name": "talos",
+  "image": "ghcr.io/nifr/talos:latest",
+  "overrideCommand": true,
+  "runArgs": [
+    "--hostname=talos"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "./features/talosctl": {
+      "version": "1.11.0"
+    }
+  }
 }

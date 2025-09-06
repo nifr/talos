@@ -43,7 +43,7 @@ variable "name" {
 }
 
 variable "platform_amd64" {
-  default = "false"
+  default = "true"
 }
 
 variable "platform_arm64" {
