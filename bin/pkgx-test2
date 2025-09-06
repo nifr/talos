@@ -1,0 +1,4 @@
+#!/usr/bin/env -S pkgx +bun bun
+
+console.log('hello');
+
