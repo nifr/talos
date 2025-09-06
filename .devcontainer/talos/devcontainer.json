@@ -26,5 +26,18 @@
       "documentationUrl": "https://github.com/settings/tokens"
     }
   },
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "nifr/*": {
+          "permissions": {
+            "contents": "write",
+            "workflows": "write",
+            "packages": "read",
+            "actions": "write"
+          }
+        }
+      }
+    }
   }
 }
