@@ -1,6 +1,6 @@
 {
   "name": "talos",
-  "image": "ghcr.io/nifr/talos:latest-build-2025-09-06T19.03.21Z",
+  "image": "ghcr.io/nifr/talos:latest-build-2025-09-06T20.16.12Z",
   "overrideCommand": false,
   "runArgs": [
     "--hostname=talos",
@@ -19,12 +19,35 @@
       "type": "bind",
       "source": "${localWorkspaceFolder}/.devcontainer/.secrets/GH_TOKEN",
       "target": "/run/secrets/GH_TOKEN"
+    },
+      {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/HCLOUD_TOKEN",
+      "target": "/run/secrets/HCLOUD_TOKEN"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/PULUMI_ACCESS_TOKEN",
+      "target": "/run/secrets/PULUMI_ACCESS_TOKEN"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/ssh_public_key",
+      "target": "/run/secrets/ssh_public_key"
     }
   ],
   "secrets": {
     "GH_TOKEN": {
       "description": "(required) Personal Access Token (PAT), used by GitHub CLI \"gh\"",
       "documentationUrl": "https://github.com/settings/tokens"
+    },
+    "HCLOUD_TOKEN": {
+      "description": "(required) Hetzner Cloud API token, used by \"hcloud\" and Pulumi",
+      "documentationUrl": "https://console.hetzner.com/projects/<project_id>/security/tokens"
+    },
+    "PULUMI_ACCESS_TOKEN": {
+      "description": "(required) Pulumi Cloud Access Token, used by Pulumi",
+      "documentationUrl": "https://app.pulumi.com/user/settings/tokens"
     }
   },
   "hostRequirements": {
