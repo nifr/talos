@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+disableStartupPopups: true
+os:
+  editPreset: 'vscode'
+  copyToClipboardCmd: >
+    if [[ "$TERM" =~ ^(screen|tmux) ]]; then
+      printf "\033Ptmux;\033\033]52;c;$(printf {{text}} | base64 -w 0)\a\033\\" > /dev/tty
+    else
+      printf "\033]52;c;$(printf {{text}} | base64 -w 0)\a" > /dev/tty
+    fi

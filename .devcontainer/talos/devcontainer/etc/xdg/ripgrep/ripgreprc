@@ -1,0 +1,8 @@
+--smart-case
+--hidden
+--no-ignore
+--iglob=**/*
+--iglob=!.git/
+--iglob=!*.js.map
+--iglob=!**/vendor/**/app.js
+--iglob=!**/*.cache

@@ -1,0 +1,26 @@
+version: "0.5"
+is_strict: true
+
+processes:
+
+  docker:
+    namespace: docker
+    description: 'runs Docker server'
+    working_dir: '/opt/docker'
+    command: |
+      service-docker
+    ready_log_line: 'API listen on /var/run/docker.sock'
+    log_location: /var/log/docker.service.log
+    log_configuration:
+      fields_order: ["message"]
+      disable_json: true
+      no_metadata: true
+      add_timestamp: false
+      no_color: true
+      flush_each_line: false
+      rotation:
+        max_size_mb: 10
+        max_age_days: 1
+        max_backups: 1
+        compress: false
+

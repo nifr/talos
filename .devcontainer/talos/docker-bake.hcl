@@ -1,5 +1,65 @@
-target "devcontainer" {
+target "debian" {
+  dockerfile = "debian.Dockerfile"
   context = "."
+  args = {
+    base_image = "docker.io/library/debian:13-slim"
+  }
+}
+
+target "pkgx" {
+  dockerfile = "pkgx.Dockerfile"
+  context = "."
+  contexts = {
+    "base" = "target:debian"
+  }
+  args = {
+    base_image = "docker.io/library/debian:13-slim"
+  }
+}
+
+target "pkgx-packages" {
+  dockerfile = "pkgx-packages.Dockerfile"
+  contexts = {
+    "base" = "target:pkgx"
+  }
+}
+
+target "s6-overlay" {
+  dockerfile = "s6-overlay.Dockerfile"
+  contexts = {
+    "base" = "target:pkgx-packages"
+  }
+}
+
+target "process-compose" {
+  dockerfile = "process-compose.Dockerfile"
+  contexts = {
+    "base" = "target:s6-overlay"
+    "build-context" = "./process-compose"
+  }
+}
+
+target "docker" {
+  dockerfile = "docker.Dockerfile"
+  contexts = {
+    "base" = "target:process-compose"
+    "build-context" = "./docker"
+    "source-code" = "https://github.com/docker/mcp-gateway.git#v0.18.0"
+  }
+}
+
+target "devcontainer" {
+  dockerfile = "devcontainer.Dockerfile"
+  contexts = {
+    base = "target:docker"
+    build-context = "./devcontainer"
+  }
+}
+
+target "talos" {
+  contexts = {
+    "base" = "target:devcontainer"
+  }
   dockerfile = "talos.Dockerfile"
   args = {
     base_image = "docker.io/library/debian:13-slim"

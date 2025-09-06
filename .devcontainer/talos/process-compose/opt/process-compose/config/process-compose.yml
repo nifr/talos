@@ -1,0 +1,19 @@
+version: "0.5"
+is_strict: true
+
+log_level: info
+# log_location: /tmp/process-compose-root.log
+log_configuration:
+  fields_order: ["time", "level", "message"] # order of logging fields. The default is time, level, message
+  disable_json: false
+  rotation:
+    max_size_mb: 10  # the max size in MB of the logfile before it's rolled
+    max_age_days: 1 # the max age in days to keep a logfile
+    max_backups: 1  # the max number of rolled files to keep
+    compress: false  # determines if the rotated log files should be compressed using gzip. The default is false
+
+processes:
+  process-compose-logs:
+    command: "tail -f -n100 process-compose-root.log"
+    working_dir: "/tmp"
+    ready_log_line: 'INF Process Compose'

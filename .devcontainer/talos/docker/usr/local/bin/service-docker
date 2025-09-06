@@ -1,0 +1,34 @@
+#!/command/execlineb -P
+
+foreground {
+  echo "Service started."
+}
+
+# combine/move stderr to stdout, same as 2>&1 in bash
+# see: https://www.skarnet.org/software/execline/fdmove.html
+fdmove -c 2 1
+# see: https://skarnet.org/software/execline/execline-cd.html
+execline-cd "/opt/docker"
+# see: https://skarnet.org/software/s6/s6-setuidgid.html
+s6-setuidgid "root"
+
+export container "docker"
+
+foreground {
+  echo "Starting init script ..."
+}
+foreground {
+  service-docker-init
+}
+foreground {
+  echo "Finished init script."
+}
+foreground {
+  echo "Starting main service ..."
+}
+
+dockerd \
+  --pidfile="/run/docker.pid" \
+  --config-file="/opt/docker/daemon/daemon.json" \
+  --ip6tables="false" \
+  --experimental="true"

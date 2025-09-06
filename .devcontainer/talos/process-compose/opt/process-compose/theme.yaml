@@ -1,0 +1,36 @@
+style:
+  body:
+    bgColor: transparent
+    fgColor: '#434343'
+    secondaryTextColor: '#c585c0'
+    tertiaryTextColor: '#559bd5'
+    borderColor: '#434343'
+  stat_table:
+    keyFgColor: '#559bd5'
+    valueFgColor: '#ce9178'
+    logoColor: '#b5cea8'
+  proc_table:
+    headerFgColor: '#699955'
+    fgColor: '#cccccc'
+    fgWarning: '#ffd701'
+    fgPending: '#526579'
+    fgCompleted: '#699955'
+    fgError: '#f14b4d'
+  help:
+    fgColor: '#434343'
+    keyColor: '#cbcb41'
+    hlColor: transparent
+    categoryFgColor: '#559bd5'
+  dialog:
+    ## note: used by i.e. "Info"
+    fgColor: '#cccccc'
+    bgColor: transparent
+    # contrastBgColor: blue
+    # attentionBgColor: red
+    buttonFgColor: '#cccccc'
+    buttonBgColor: '#0e639c'
+    buttonFocusFgColor: white
+    buttonFocusBgColor: '#007fd4'
+    labelFgColor: '#699955'
+    fieldFgColor: '#cccccc'
+    fieldBgColor: '#3d3d3d'

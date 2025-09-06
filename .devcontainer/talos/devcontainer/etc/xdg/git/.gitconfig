@@ -1,0 +1,42 @@
+[credential "https://github.com"]
+helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+helper = !gh auth git-credential
+[safe]
+directory = /
+[branch]
+autoSetupMerge = true
+[push]
+autoSetupRemote = true
+default = current
+[core]
+pager = delta
+excludesFile = /etc/xdg/git/.gitignore
+attributesFiles = /etc/xdg/git/.gitattributes
+[interactive]
+diffFilter = delta --color-only
+[delta]
+navigate = true
+line-numbers = true
+[init]
+defaultBranch = main
+[pull]
+rebase = true
+ff-only = true
+[rebase]
+autoStash = true
+[alias]
+dash = !gh dash
+dashboard = !gh dash
+[status]
+short = true
+branch = true
+[color "status"]
+added = red normal
+changed = "#e2c08d normal"
+untracked = "#8c8c8c normal"
+localBranch = magenta bold
+remoteBranch = magenta normal
+updated = "#74c991 normal"
+[log]
+decorate = short

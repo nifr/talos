@@ -1,0 +1,10 @@
+{
+  "hosts": ["unix:///var/run/docker.sock"],
+  "features": {
+    "containerd-snapshotter": false
+  },
+  "dns": ["8.8.8.8"],
+  "default-address-pools": [
+    { "base": "172.18.0.0/16", "size": 24 }
+  ]
+}

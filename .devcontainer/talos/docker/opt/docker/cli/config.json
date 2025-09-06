@@ -1,0 +1,7 @@
+{
+  "credHelpers": {
+    "ghcr.io": "gh",
+    "docker.pkg.github.com": "gh"
+  },
+  "psFormat": "table {{.Names}}\\t{{.ID}}\\t{{.Status}}\\t{{.Image}}"
+}

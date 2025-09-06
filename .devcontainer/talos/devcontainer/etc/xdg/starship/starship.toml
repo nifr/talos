@@ -1,0 +1,25 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+command_timeout	= 5000
+format = """\
+$all\
+${custom.term_program}\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\
+$os\
+$container\
+$shell\
+$character"""
+[container]
+disabled = true
+[git_status]
+disabled =  true
+[package]
+disabled = true
+
+[custom.term_program]
+command = 'echo -n "${TERM_PROGRAM:-xTerm}"'
+when = 'true'
+format = '[@](fg:#888888) [$output](fg:#d4d4d4)'

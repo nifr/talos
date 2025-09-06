@@ -1,0 +1,64 @@
+## see: https://f1bonacc1.github.io/process-compose/tui/#shortcuts-configuration
+## see: https://github.com/F1bonacc1/process-compose/blob/5dc89127bbbe4c3c361f61341e9baa84143e23a7/src/tui/actions.go#L46
+## other shortcuts that can not be configured here:
+## ctrl + b  --> send to background
+## ctrl + k  --> clear logs
+## ctrl + t  --> select theme
+## ctrl + e  --> edit process in EDITOR
+## ctrl + l  --> reload config
+shortcuts:
+  help:
+    description: ' Help'
+    ## note: they keybinding for Help can not be changed in v1.64.1
+    # shortcut: F1 
+  find:
+    description: ' Find'
+    ## note: they keybinding for find can not be changed in v1.64.1
+    # shortcut: Ctrl-F
+  log_follow:
+    # toggle_description:
+    #   'false': Follow Off
+    #   'true': Follow On
+    shortcut: Ctrl-J # shortcut to be used
+  log_screen:
+    ## note: ctrl + v ("view" logs)
+    # toggle_description:
+    #   'false': Half Screen
+    #   'true': Full Screen
+    shortcut: Ctrl-h # default: F4
+  log_wrap:
+    ## note: ctrl + w ("wrap")
+    # toggle_description:
+    #   'false': Wrap Off
+    #   'true': Wrap On
+    shortcut: Ctrl-W # default: F6
+  process_screen:
+    ## note: ctrl + m ("maximize")
+    shortcut: Ctrl-M
+  process_info:
+    ## note: ctrl + i ("info")
+    description: ' Info'
+    shortcut: Ctrl-I
+  process_start:
+    ## note: ctrl + u ("up")
+    description: ' Start'
+    shortcut: Ctrl-U
+  process_stop:
+    ## note: ctrl + d ("down")
+    description: ' Stop'
+    shortcut: Ctrl-D
+  process_restart:
+    description: ' Restart'
+    shortcut: Ctrl-R
+  # process_scale:
+    ## note: process_scale description is not applied in v1.164.1
+    # description: ' Scale'
+  # process_screen:
+    ## note: The descriptions for toggling buttons do not work in v1.64.1
+    # toggle_description:
+    #  false: ' Half Screen'
+    #  true: ' Full Screen'
+  quit:
+    description: ' Quit'
+    shortcut: Ctrl-C
+
