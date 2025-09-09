@@ -14,6 +14,7 @@ ENV _devcontainer_metadata_to_add='[{ \
     "vscode": { \
       "extensions": [ \
         "editorconfig.editorconfig", \
+        "dotenv.dotenv-vscode", \
         "MermaidChart.vscode-mermaid-chart" \
       ], \
       "settings": { \
