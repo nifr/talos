@@ -11,7 +11,7 @@ FROM base
 ## see:  https://github.com/oven-sh/bun/releases
 ## size: bun is 90M
 # renovate: datasource=github-releases depName=pkgx:bun packageName=oven-sh/bun
-ARG bun_version='1.2.18'
+ARG bun_version='1.2.21'
 ## note: do NOT install NodeJS via pkgx as it creates a very large image
 ##.      we install it with fnm instead to keep the image size down
 ##
