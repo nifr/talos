@@ -1,0 +1,7 @@
+Package: postgresql-*
+Pin: origin apt.postgresql.org
+Pin-Priority: 1001
+
+Package: postgresql-*
+Pin: origin deb.debian.org
+Pin-Priority: -1

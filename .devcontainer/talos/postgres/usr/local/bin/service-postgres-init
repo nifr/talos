@@ -1,0 +1,274 @@
+#!/usr/bin/env -S bash --noprofile --norc -o errexit -o pipefail -o noclobber -o nounset
+
+# clear template config: truncate -s0 /usr/share/postgresql/16/postgresql.conf.sample
+# remove existing: rm -rf /var/run/postgres/{data,wal}
+# manual execution: ./features/s6-service-postgresql/s6-rc.d/postgresql-init/up
+# see: https://www.postgresql.org/docs/current/runtime-config-file-locations.html
+# start server:
+
+printf '[postgresql-init] Starting ...\n'
+
+if ! getent group "${postgresql_group_name}" >/dev/null; then
+  echo '=== Adding PostgreSQL group'
+  groupadd \
+    --gid "${postgresql_group_id}" \
+    "${postgresql_group_name}"
+else
+  echo '=== Updating PostgreSQL group'
+  groupmod \
+    --gid "${postgresql_group_id}" \
+    "${postgresql_group_name}"
+fi
+
+# Create or update user
+if ! id "${postgresql_user_name}" >/dev/null 2>&1; then
+  echo '=== Adding PostgreSQL user'
+  useradd \
+    --system \
+    --uid "${postgresql_user_id}" \
+    --gid "${postgresql_group_id}" \
+    --home-dir "${POSTGRESQL_HOME}" \
+    --shell '/usr/sbin/nologin' \
+    --no-create-home \
+    "${postgresql_user_name}"
+else
+  echo '=== Updating PostgreSQL user'
+  usermod \
+    --uid "${postgresql_user_id}" \
+    --gid "${postgresql_group_id}" \
+    --home "${POSTGRESQL_HOME}" \
+    --shell '/usr/sbin/nologin' \
+    "${postgresql_user_name}"
+fi
+
+printf '[postgresql-init] Remove existing POSTGRESQL_RUNTIME_DIR="%s"\n' \
+  "${POSTGRESQL_RUNTIME_DIR}"
+rm -rf "${POSTGRESQL_RUNTIME_DIR}"
+
+printf '[postgresql-init] Create postgresql directories (HOME, [..]) ...\n'
+printf '[postgresql-init] - %s="%s"\n' \
+  'POSTGRESQL_HOME' "${POSTGRESQL_HOME}" \
+  'POSTGRESQL_RUNTIME_DIR' "${POSTGRESQL_RUNTIME_DIR}" \
+  'POSTGRESQL_CONFIG_DIR' "${POSTGRESQL_CONFIG_DIR}"
+install \
+  -d \
+  --mode=2770 \
+  --owner=root \
+  --group="${postgresql_group_name}" \
+    "${POSTGRESQL_HOME}" \
+    "${POSTGRESQL_RUNTIME_DIR}" \
+    "${POSTGRESQL_CONFIG_DIR}" \
+    "${POSTGRESQL_CONFIG_DIR}/postgresql.conf.d" \
+    "${POSTGRESQL_CONFIG_DIR}/pg_ident.conf.d" \
+    "${POSTGRESQL_CONFIG_DIR}/pg_hba.conf.d" \
+    "${POSTGRESQL__log_directory}"
+
+if ! locale -a | grep -qE '^en_US\.utf8$'; then
+  printf '[postgresql-init] Generating locale "en_US.UTF-8" ...\n'
+  locale-gen "en_US.UTF-8"
+  if ! locale -a | grep -qE '^en_US\.utf8$'; then
+    printf '[postgresql-init] WARNING: locale "en_US.UTF-8" was not generated!\n'
+  fi
+else
+  printf '[postgresql-init] Locale "en_US.UTF-8" already exists.\n'
+fi
+
+# see also: "cat /var/run/postgres/data/PG_VERSION" => "16"
+readonly postgres_version="$(postgres -V | grep -oE '[.0-9]+' | head -1)"
+readonly postgres_major_version="${postgres_version%.*}"
+
+printf '[postgresql-init] environment variables\n'
+env | grep -iE '^postgres'
+
+# note: --set="data_directory=/var/run/postgres/data" ... does not add to postgresql.conf (sometimes?)
+# note: "min_wal_size" must be at least twice "wal_segment_size"
+# note: without "max_wal_senders=0" -> FATAL:  WAL streaming (max_wal_senders > 0) requires wal_level "replica" or "logical"
+s6-setuidgid "${postgresql_user_name}" initdb \
+  --no-instructions \
+  --pgdata="${POSTGRESQL__data_directory}" \
+  --auth="trust" \
+  --auth-host="trust" \
+  --auth-local="trust" \
+  --allow-group-access \
+  --encoding="UTF-8" \
+  --locale-provider="icu" \
+  --icu-locale="en_US.UTF-8" \
+  --waldir="/var/run/postgresql/wal" \
+  --wal-segsize="16" \
+  --username="root" \
+  --set="cluster_name=" \
+  --set="data_directory=${POSTGRESQL__data_directory}" \
+  --set="config_file=${POSTGRESQL__config_file}" \
+  --set="hba_file=${POSTGRESQL__hba_file}" \
+  --set="ident_file=${POSTGRESQL__ident_file}" \
+  --set="external_pid_file=${POSTGRESQL__external_pid_file}" \
+  --set="listen_addresses=0.0.0.0" \
+  --set="port=5432" \
+  --set="bonjour=off" \
+  --set="ssl=off" \
+  --set="unix_socket_directories=${POSTGRESQL_RUNTIME_DIR}" \
+  --set="unix_socket_group=${postgresql_group_name}" \
+  --set="unix_socket_permissions=0770" \
+  --set="logging_collector=on" \
+  --set="log_destination=jsonlog" \
+  --set="log_directory=${POSTGRESQL__log_directory}" \
+  --set="log_filename=postgresql-%Y-%m-%d.log" \
+  --set="log_file_mode=0640" \
+  --set="log_line_prefix=time=%t, pid=%p %q db=%d, usr=%u, client=%h , app=%a, query_id=%Q, line=%l" \
+  --set="compute_query_id=on" \
+  --set="log_rotation_age=0" \
+  --set="log_rotation_size=0" \
+  --set="log_timezone=Etc/UTC" \
+  --set="log_statement=none" \
+  --set="log_duration=on" \
+  --set="log_min_duration_statement=0" \
+  --set="log_connections=on" \
+  --set="log_disconnections=on" \
+  --set="log_lock_waits=on" \
+  --set="log_checkpoints=on" \
+  --set="log_autovacuum_min_duration=0" \
+  --set="timezone=Etc/UTC" \
+  --set="max_connections=6" \
+  --set="superuser_reserved_connections=1" \
+  --set="shared_buffers=128MB" \
+  --set="effective_cache_size=384MB" \
+  --set="work_mem=4MB" \
+  --set="huge_pages=off" \
+  --set="max_worker_processes=2" \
+  --set="max_parallel_workers=1" \
+  --set="max_parallel_workers_per_gather=0" \
+  --set="max_parallel_maintenance_workers=1" \
+  --set="maintenance_work_mem=128MB" \
+  --set="autovacuum_max_workers=1" \
+  --set="autovacuum_work_mem=-1" \
+  --set="wal_level=minimal" \
+  --set="max_wal_senders=0" \
+  --set="synchronous_commit=off" \
+  --set="min_wal_size=32MB" \
+  --set="max_wal_size=512MB" \
+  --set="wal_keep_size=0" \
+  --set="archive_mode=off" \
+  --set="statement_timeout=15000" \
+  --set="shared_preload_libraries=pg_stat_statements" \
+  --set="bgwriter_flush_after=512kB" \
+  --set="checkpoint_flush_after=256kB"
+
+declare -ra postgresql_configs=(
+  "pg_hba"
+  "pg_ident"
+)
+
+# note: pg_hba and pg_ident require UNQOUTED include_dir ...
+# see: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
+for config_file in "${postgresql_configs[@]}"; do
+install \
+  -o "${postgresql_user_name}" \
+  -g "${postgresql_group_name}" \
+  -m '640' \
+    <(cat <<CONFIG_TEMPLATE
+include_dir ${POSTGRESQL_CONFIG_DIR}/${config_file}.conf.d/
+CONFIG_TEMPLATE
+) \
+  "${POSTGRESQL_CONFIG_DIR}/${config_file}.conf"
+done
+
+# ... while postgresql.conf requires QUOTED include_dir
+config_file='postgresql'
+install \
+  -o "${postgresql_user_name}" \
+  -g "${postgresql_group_name}" \
+  -m '640' \
+    <(cat <<CONFIG_TEMPLATE
+include_dir '${POSTGRESQL_CONFIG_DIR}/${config_file}.conf.d/'
+CONFIG_TEMPLATE
+) \
+  "${POSTGRESQL_CONFIG_DIR}/${config_file}.conf"
+unset config_file
+
+mv \
+  "${PGDATA}/postgresql.conf" \
+  "${POSTGRESQL_CONFIG_DIR}/postgresql.conf.d/30-default.postgresql.conf"
+
+mv \
+  "${PGDATA}/pg_hba.conf" \
+  "${POSTGRESQL_CONFIG_DIR}/pg_hba.conf.d/30-default.pg_hba.conf"
+
+install \
+  -o "${postgresql_user_name}" \
+  -g "${postgresql_group_name}" \
+  -m '640' \
+    /dev/null \
+    "${POSTGRESQL_CONFIG_DIR}/pg_ident.conf.d/30-default.pg_ident.conf"
+
+# note: starts PostgreSQL, socket only, not listening on IPv4/IPv6 interfaces
+# connect: psql -p "${POSTGRESQL__port}" -h "${POSTGRESQL__unix_socket_directories}" [..]
+# example: psql -p 5432 -h /var/run/postgres
+s6-setuidgid "${postgresql_user_name}" pg_ctl \
+  --wait \
+  --pgdata="${POSTGRESQL__data_directory}" \
+  --log="${POSTGRESQL__log_directory}/postgresql-init.log" \
+  --options="--config-file=${POSTGRESQL__config_file} -c listen_addresses=''" \
+    start
+
+declare -ra postgresql_extensions=(
+  "pg_stat_statements"
+  "hstore"
+  "uuid-ossp"
+  "postgis"
+)
+for extension_name in "${postgresql_extensions[@]}"; do
+
+# install extensions in default "template1" and "postgres" databases
+# note: database "postgres" is automatically created by "initdb"
+# TODO: postgis
+# see: https://trac.osgeo.org/postgis/wiki/UsersWikiPostGIS3UbuntuPGSQLApt
+# see: https://postgrest.org/en/stable/how-tos/working-with-postgresql-data-types.html#postgis
+# see: https://postgrest.org/en/stable/how-tos/working-with-postgresql-data-types.html#hstore
+psql -v ON_ERROR_STOP=1 --no-password --echo-all --dbname='template1' \
+  --set extension_name="${extension_name}" \
+<<'SQL'
+CREATE EXTENSION IF NOT EXISTS :"extension_name";
+\connect postgres;
+CREATE EXTENSION IF NOT EXISTS :"extension_name";
+SQL
+
+done
+
+# ALTER DATABASE template1 SET search_path=public,postgis,contrib;
+# CREATE SCHEMA postgis;
+# CREATE EXTENSION postgis SCHEMA postgis;
+# CREATE DATABASE "test";
+# /connect test;
+# SHOW search_path ;
+# SELECT postgis_full_version();
+
+# note: support POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+# note: check if POSTGRES_USER is not the one given to "initdb"
+# note: check for existance with \gexec
+# see: https://github.com/docker-library/postgres/blob/f85674ce472bc78b8b8a0478dacd595e44cb9616/16/bookworm/docker-entrypoint.sh
+# see: https://stackoverflow.com/a/56040183 (emulate create role if not exists)
+# see: https://stackoverflow.com/a/18389184 (emulate create database if not exists)
+psql -v ON_ERROR_STOP=1 --no-password --echo-all --dbname='postgres' \
+  --set database_name="${POSTGRES_DB}" \
+  --set user_name="${POSTGRES_USER}" \
+  --set user_password="${POSTGRES_PASSWORD}" \
+<<'PSQL'
+  CREATE DATABASE :"database_name" ;
+  CREATE ROLE :"user_name" WITH SUPERUSER CREATEDB CREATEROLE LOGIN ENCRYPTED PASSWORD :'user_password';
+  ALTER ROLE :"user_name" SET search_path TO "$user", postgis, topology, public;
+PSQL
+
+s6-setuidgid "${postgresql_user_name}" pg_ctl \
+  --wait \
+  --pgdata="${POSTGRESQL__data_directory}" \
+  --log="${POSTGRESQL__log_directory}/postgresql-init.log" \
+  --options="--config-file=${POSTGRESQL__config_file}" \
+  --mode='fast' \
+    stop
+
+# creates: /var/run/postgres/data/postgresql.conf
+# creates: /var/run/postgres/data/postgresql.auto.conf
+# creates: /var/run/postgres/data/pg_hba.conf
+# start: postgres -c 'config_file=/var/run/postgres/data/postgresql.conf'
+
+printf '[postgresql-init] Finished.\n'

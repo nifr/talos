@@ -1,0 +1,26 @@
+version: "0.5"
+is_strict: true
+
+processes:
+
+  postgres:
+    namespace: postgres
+    description: 'runs Postgres server'
+    working_dir: '/'
+    command: |
+      service-postgres
+    # ready_log_line: 'API listen on /var/run/postgres.sock'
+    log_location: /var/log/postgres.service.log
+    log_configuration:
+      fields_order: ["message"]
+      disable_json: true
+      no_metadata: true
+      add_timestamp: false
+      no_color: true
+      flush_each_line: false
+      rotation:
+        max_size_mb: 10
+        max_age_days: 1
+        max_backups: 1
+        compress: false
+

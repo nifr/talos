@@ -1,0 +1,114 @@
+#!/command/execlineb -P
+
+fdmove -c 2 1
+
+importas -S -D "/opt/process-compose/config/postgres.env" postgresql_env_file
+
+foreground {
+  echo "[postgresql-init] Loading envfile ${postgresql_env_file}"
+}
+# see: https://skarnet.org/software/execline/envfile.html
+# -i : strict. If file does not exist, exit 111
+# -I : loose. If file does not exist, exec into prog without modifying the environment
+envfile -i "${postgresql_env_file}"
+
+foreground {
+  echo "[postgresql-init] Importing environment variables ..."
+}
+
+## these are all the variables used inside this script that would NOT need to be exported
+importas -Si POSTGRESQL_RUNTIME_DIR
+importas -Si postgresql_user_name
+
+importas -Si POSTGRESQL__data_directory
+importas -Si POSTGRESQL__external_pid_file
+importas -Si POSTGRESQL__config_file
+importas -Si POSTGRESQL__hba_file
+importas -Si POSTGRESQL__ident_file
+
+## The following variables are used by service-postgres-init and need to be exported before calling it
+## see: https://skarnet.org/software/execline/importas.html
+## see: https://skarnet.org/software/execline/export.html
+## import -S VAR_NAME : import VAR_NAME from environment
+## import -i : insist, exit if not found
+## import -D "default" VAR_NAME : use "default" if VAR_NAME not found in environment
+importas -S -D "/var/run/postgresql" POSTGRESQL_HOME
+export HOME "${POSTGRESQL_HOME}"
+
+importas -Si postgresql_group_name
+export postgresql_group_name "${postgresql_group_name}"
+
+importas -Si postgresql_group_id
+export postgresql_group_id "${postgresql_group_id}"
+
+importas -Si postgresql_user_name
+export postgresql_user_name "${postgresql_user_name}"
+
+importas -Si postgresql_user_id
+export postgresql_user_id "${postgresql_user_id}"
+
+importas -iS POSTGRESQL_RUNTIME_DIR
+export POSTGRESQL_RUNTIME_DIR "${POSTGRESQL_RUNTIME_DIR}"
+
+importas -Si POSTGRESQL_CONFIG_DIR
+export POSTGRESQL_CONFIG_DIR "${POSTGRESQL_CONFIG_DIR}"
+
+importas -Si POSTGRESQL__log_directory
+export POSTGRESQL__log_directory "${POSTGRESQL__log_directory}"
+importas -Si POSTGRESQL__data_directory
+export POSTGRESQL__data_directory "${POSTGRESQL__data_directory}"
+importas -Si POSTGRESQL__config_file
+export POSTGRESQL__config_file "${POSTGRESQL__config_file}"
+importas -Si POSTGRESQL__hba_file
+export POSTGRESQL__hba_file "${POSTGRESQL__hba_file}"
+importas -Si POSTGRESQL__ident_file
+export POSTGRESQL__ident_file "${POSTGRESQL__ident_file}"
+importas -Si POSTGRESQL__external_pid_file
+export POSTGRESQL__external_pid_file "${POSTGRESQL__external_pid_file}"
+importas -S -D "5432" POSTGRESQL__port
+export POSTGRESQL__port "${POSTGRESQL__port}"
+importas -Si POSTGRESQL__unix_socket_directories
+export POSTGRESQL__unix_socket_directories "${POSTGRESQL__unix_socket_directories}"
+importas -Si POSTGRES_DB
+export POSTGRES_DB "${POSTGRES_DB}"
+importas -Si POSTGRES_USER
+export POSTGRES_USER "${POSTGRES_USER}"
+importas -Si POSTGRES_PASSWORD
+export POSTGRES_PASSWORD "${POSTGRES_PASSWORD}"
+importas -Si PGDATA
+export PGDATA "${PGDATA}"
+
+## with-contenv fails if container init process is not /init from s6-overlay
+# with-contenv
+
+foreground { echo "[postgresql-init] Starting /usr/local/bin/postgresql-init ..." }
+
+## note: foreground scripts can exit with non-zero exit code and execline will continue execution
+##       this can leave services in a broken state if the init script fails
+##       so we use 'if' to only continue if the init script succeeds
+ifelse -n { 
+  /usr/local/bin/service-postgres-init
+} {
+  foreground { echo "[postgresql-init] ERROR: Init crashed! Attempting to clean up and stop service ..." }
+  s6-setuidgid "${postgresql_user_name}" pg_ctl \
+    --wait \
+    --pgdata="${POSTGRESQL__data_directory}" \
+    --log="${POSTGRESQL__log_directory}/postgresql-init.log" \
+    --options="--config-file=${POSTGRESQL__config_file}" \
+    --mode='fast' \
+      stop
+  exit 1
+}
+
+foreground { echo "[postgresql-init] Starting service ..." }
+
+execline-cd "${POSTGRESQL_RUNTIME_DIR}"
+s6-setuidgid "${postgresql_user_name}"
+
+postgres \
+  -c "data_directory=${POSTGRESQL__data_directory}" \
+  -c "config_file=${POSTGRESQL__config_file}" \
+  -c "hba_file=${POSTGRESQL__hba_file}" \
+  -c "ident_file=${POSTGRESQL__ident_file}" \
+  -c "external_pid_file=${POSTGRESQL__external_pid_file}"
+
