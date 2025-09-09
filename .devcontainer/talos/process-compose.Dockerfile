@@ -99,6 +99,9 @@ ENV PC_CONFIG_FILES="${PC_CONFIG_FILES}"
 ENV TERM='xterm-256color'
 ENV COLORTERM='truecolor'
 
+ENV LANG='C.UTF-8'
+ENV LC_ALL='C.UTF-8'
+
 CMD [ \
   "process-compose", \
   "--tui=false", \
