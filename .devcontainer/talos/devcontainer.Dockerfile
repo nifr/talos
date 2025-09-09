@@ -293,6 +293,7 @@ install \
   'https://raw.githubusercontent.com/eza-community/eza-themes/refs/heads/main/themes/one_dark.yml'
 SETUP_EZA
 
+## start: [lazygit:config]
 ARG LG_CONFIG_FILE='/etc/xdg/lazygit/lazygit.yml'
 ENV LG_CONFIG_FILE="${LG_CONFIG_FILE}"
 RUN \
@@ -305,6 +306,44 @@ install -d -m 2755 \
 install -m 644 \
   {${build_context_mount_path},}${LG_CONFIG_FILE:?}
 SETUP_LAZYGIT
+## end: [lazygit:config]
+
+## start: [lazygit:vscode]
+## note:  enables lazygit toggle in VSCode with CMD+Shift+L
+## note:  "lazygit-vscode.autoMaximizeWindow": true -> has issues! opens Copilot every time lazygit is opened
+ARG _devcontainer_metadata="${_devcontainer_metadata:-[{\}]}"
+ENV _devcontainer_metadata_to_add='[{ \
+  "customizations": { \
+    "vscode": { \
+      "extensions": [ \
+\
+        "TomPollak.lazygit-vscode" \
+\
+      ], \
+      "settings": { \
+\
+        "telemetry.telemetryLevel": "off", \
+\
+        "lazygit-vscode.autoMaximizeWindow": false, \
+        "lazygit-vscode.panels": { \
+            "sidebar": "hide", \
+            "panel": "hide", \
+            "secondarySidebar": "keep" \
+        }, \
+        "terminal.integrated.sendKeybindingsToShell": false, \
+        "terminal.integrated.commandsToSkipShell": [ \
+            "lazygit-vscode.toggle", \
+            "workbench.action.closeWindow" \
+        ] \
+\
+      } \
+    } \
+  } \
+}]'
+ENV _devcontainer_metadata="${_devcontainer_metadata%\}]}    },    ${_devcontainer_metadata_to_add#[}"
+ENV _devcontainer_metadata_to_add=
+LABEL devcontainer.metadata="${_devcontainer_metadata}"
+## end: [lazygit:vscode]
 
 ARG RIPGREP_CONFIG_PATH='/etc/xdg/ripgrep/ripgreprc'
 ENV RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH}"
