@@ -72,7 +72,7 @@ ARG biome_version='2.1.1'
 ## see:  https://github.com/cli/cli/releases
 ## see:  https://pkgx.dev/pkgs/cli.github.com/
 # renovate: datasource=github-releases depName=pkgx:gh packageName=cli/cli
-ARG github_cli_version='2.71.2'
+ARG github_cli_version='2.79.0'
 ## see:  https://github.com/evilmartians/lefthook/releases
 ## see:  https://pkgx.dev/pkgs/github.com/evilmartians/lefthook/
 ## size: lefthook is 13M
