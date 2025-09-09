@@ -34,10 +34,10 @@ ARG node_version='24.7.0'
 ## see: https://www.npmjs.com/package/npm?activeTab=versions
 ARG npm_version='11.6.0'
 ## see: https://github.com/yarnpkg/berry/releases
-ARG yarn_version='4.9.2'
+ARG yarn_version='4.9.4'
 ## see: https://github.com/pnpm/pnpm/releases
 ## see: https://www.npmjs.com/package/pnpm?activeTab=versions
-ARG pnpm_version='10.13.1'
+ARG pnpm_version='10.15.1'
 
 ## npm group that owns /opt/npm/global/
 ARG npm_group_name='npm-users'
