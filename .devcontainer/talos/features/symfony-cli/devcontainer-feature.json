@@ -1,0 +1,14 @@
+{
+    "name": "symfony-cli",
+    "version": "0.0.1",
+    "description": "Installs symfonycli, the CLI for Symfony",
+    "documentationURL": "https://github.com/symfony-cli/symfony-cli/releases",
+    "options": {
+        "version": {
+        "type": "string",
+        "default": "5.12.0",
+        "proposals": ["latest", "5.12.0", "5.11.0"],
+        "description": "Version of \"symfony-cli\" to install."
+        }
+    }
+}
