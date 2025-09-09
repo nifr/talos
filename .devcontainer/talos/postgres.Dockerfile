@@ -161,7 +161,7 @@ ENV _devcontainer_metadata_to_add='[{ \
             "id": "29E52482-8EBA-4A50-A930-2B013C2936B2", \
             "groupId": "3C7A09B6-45F0-4529-99D2-DC1593CE70E6", \
             "authenticationType": "None", \
-            "connectTimeout": 15, \
+            "connectTimeout": 5, \
             "applicationName": "vscode-pgsql", \
             "clientEncoding": "utf8", \
             "sslmode": "disable", \
