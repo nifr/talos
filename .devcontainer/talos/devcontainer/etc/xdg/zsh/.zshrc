@@ -97,6 +97,10 @@ if (( $+commands[starship] )); then
   source <(starship completions zsh)
 fi
 
+if (( $+commands[hcloud] )); then
+  source <(hcloud completion zsh)
+fi
+
 ## note: direnv zsh completion is part of zsh-users/zsh-completions
 if (( $+commands[direnv] )); then
   source <(direnv hook zsh)
