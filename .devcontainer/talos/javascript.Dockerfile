@@ -30,7 +30,7 @@ ARG fnm_version='1.38.1'
 ## see: https://github.com/nodejs/node/releases
 ## size: /opt/fnm/node-versions/v24.4.0/ is 192M, includes 17M for "npm" and 2M for "corepack"
 # ARG node_version='24.4.0'
-ARG node_version='23.11.1'
+ARG node_version='24.7.0'
 ## see: https://www.npmjs.com/package/npm?activeTab=versions
 ARG npm_version='11.4.2'
 ## see: https://github.com/yarnpkg/berry/releases
