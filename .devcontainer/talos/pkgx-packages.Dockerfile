@@ -83,7 +83,7 @@ ARG lefthook_version='1.11.11'
 ## warning: pkgx version depends on git-scm.org^2
 ## size: lazygit is 30M
 # renovate: datasource=github-releases depName=pkgx:lazygit packageName=jesseduffield/lazygit
-ARG lazygit_version='0.51.1'
+ARG lazygit_version='0.55.0'
 ## see:  https://github.com/dandavison/delta/releases
 ## see:  https://pkgx.dev/pkgs/crates.io/git-delta/
 ## note: delta v0.18.2 released 2024-09
