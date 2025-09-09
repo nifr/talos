@@ -137,7 +137,7 @@ ENV POSTGRESQL__unix_socket_directories="/var/run/postgresql"
 ENV POSTGRESQL__log_directory="/var/run/postgresql/logs"
 
 ARG _devcontainer_metadata="${_devcontainer_metadata:-[{\}]}"
-ENV _devccontainer_metadata_to_add='[{ \
+ENV _devcontainer_metadata_to_add='[{ \
   "customizations": { \
     "vscode": { \
       "extensions": [ \
@@ -192,6 +192,6 @@ ENV _devccontainer_metadata_to_add='[{ \
     } \
   } \
 }]'
-ENV _devcontainer_metadata="${_devcontainer_metadata%\}]}    },    ${_devccontainer_metadata_to_add#[}"
-ENV _devccontainer_metadata_to_add=
+ENV _devcontainer_metadata="${_devcontainer_metadata%\}]}    },    ${_devcontainer_metadata_to_add#[}"
+ENV _devcontainer_metadata_to_add=
 LABEL devcontainer.metadata="${_devcontainer_metadata}"

@@ -6,7 +6,7 @@ FROM "${base_image}" AS base
 FROM base
 
 ARG _devcontainer_metadata="${_devcontainer_metadata:-[{\}]}"
-ENV _devccontainer_metadata_to_add='[{ \
+ENV _devcontainer_metadata_to_add='[{ \
   "features": { \
     "ghcr.io/devcontainers/features/git:1": {} \
   }, \
@@ -24,6 +24,6 @@ ENV _devccontainer_metadata_to_add='[{ \
     } \
   } \
 }]'
-ENV _devcontainer_metadata="${_devcontainer_metadata%\}]}    },    ${_devccontainer_metadata_to_add#[}"
-ENV _devccontainer_metadata_to_add=
+ENV _devcontainer_metadata="${_devcontainer_metadata%\}]}    },    ${_devcontainer_metadata_to_add#[}"
+ENV _devcontainer_metadata_to_add=
 LABEL devcontainer.metadata="${_devcontainer_metadata}"
