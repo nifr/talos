@@ -67,7 +67,7 @@ ARG fnm_version='1.38.1'
 ##
 ## size: biome is 25M
 # renovate: datasource=github-releases depName=pkgx:biome packageName=biomejs/biome
-ARG biome_version='2.1.1'
+ARG biome_version='2.2.3'
 
 ## see:  https://github.com/cli/cli/releases
 ## see:  https://pkgx.dev/pkgs/cli.github.com/
