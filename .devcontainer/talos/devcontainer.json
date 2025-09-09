@@ -1,6 +1,6 @@
 {
   "name": "talos",
-  "image": "ghcr.io/nifr/talos:latest-build-2025-09-06T22.01.00Z",
+  "image": "ghcr.io/nifr/talos:latest",
   "overrideCommand": false,
   "runArgs": [
     "--hostname=talos",
