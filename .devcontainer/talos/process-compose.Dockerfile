@@ -1,11 +1,17 @@
 # check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
 
 FROM build-context
+
 FROM base
 
 SHELL ["/bin/bash","--noprofile","--norc","-o","nounset","-o","errexit","-o","pipefail","-o","noclobber","-c"]
 ARG TARGETARCH
-ARG process_compose_version='1.64.1'
+
+## see: https://github.com/F1bonacc1/process-compose/releases
+# renovate: datasource=github-releases depName=process-compose packageName=F1bonacc1/process-compose
+ARG process_compose_version='1.73.0'
+
+## note: PROC_COMP_CONFIG is the global config folder for process-compose, contains {settings,theme,shortcuts}.yaml
 ARG PROC_COMP_CONFIG='/opt/process-compose'
 ENV PROC_COMP_CONFIG="${PROC_COMP_CONFIG}"
 
