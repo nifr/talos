@@ -12,6 +12,7 @@ execline-cd "/opt/docker"
 # see: https://skarnet.org/software/s6/s6-setuidgid.html
 s6-setuidgid "root"
 
+## todo: why was this needed again? :)
 export container "docker"
 
 foreground {
