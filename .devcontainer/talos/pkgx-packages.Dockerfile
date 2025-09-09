@@ -23,6 +23,7 @@ ARG pkgm_packages_whitelist=' \
   lego \
   packer \
   pulumi \
+  restic \
   rg \
   shfmt \
   starship \
@@ -248,6 +249,7 @@ readonly -A pkgm_packages=(
   [gum]="charm.sh/gum@${gum_version}"
   [jq]="stedolan.github.io/jq@${jq_version}"
   [mise]="mise.jdx.dev${mise_version}"
+  [restic]="restic.net/restic@${restic_version}"
   [rg]="crates.io/ripgrep@${rg_version}"
   [shfmt]="mvdan.cc/sh@${shfmt_version}"
   [starship]="starship.rs@${starship_version}"
