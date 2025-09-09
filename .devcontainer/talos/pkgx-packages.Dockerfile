@@ -77,7 +77,7 @@ ARG github_cli_version='2.71.2'
 ## see:  https://pkgx.dev/pkgs/github.com/evilmartians/lefthook/
 ## size: lefthook is 13M
 # renovate: datasource=github-releases depName=pkgx:lefthook packageName=evilmartians/lefthook
-ARG lefthook_version='1.11.11'
+ARG lefthook_version='1.12.4'
 ## see:  https://github.com/jesseduffield/lazygit/releases
 ## see:  https://pkgx.dev/pkgs/github.com/jesseduffield/lazygit/
 ## warning: pkgx version depends on git-scm.org^2
