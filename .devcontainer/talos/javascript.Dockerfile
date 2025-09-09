@@ -32,7 +32,7 @@ ARG fnm_version='1.38.1'
 # ARG node_version='24.4.0'
 ARG node_version='24.7.0'
 ## see: https://www.npmjs.com/package/npm?activeTab=versions
-ARG npm_version='11.4.2'
+ARG npm_version='11.6.0'
 ## see: https://github.com/yarnpkg/berry/releases
 ARG yarn_version='4.9.2'
 ## see: https://github.com/pnpm/pnpm/releases
