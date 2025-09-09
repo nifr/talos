@@ -186,7 +186,7 @@ ARG restic_version='0.18.0'
 ## see:  https://github.com/mvdan/sh/releases
 ## see:  https://pkgx.dev/pkgs/mvdan.cc/sh/
 # renovate: datasource=github-releases depName=pkgx:shfmt packageName=mvdan/sh
-ARG shfmt_version='3.11.0'
+ARG shfmt_version='3.12.0'
 ## see:  https://github.com/starship/starship/releases
 ## see:  https://pkgx.dev/pkgs/starship.rs/
 ## size: starship is 8.2M
