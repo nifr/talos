@@ -7,9 +7,7 @@
     "--privileged"
   ],
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "latest"
-    },
+    "ghcr.io/devcontainers/features/git:1": {},
     "./features/talosctl": {
       "version": "1.11.0"
     },
