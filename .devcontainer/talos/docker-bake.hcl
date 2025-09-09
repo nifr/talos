@@ -56,10 +56,18 @@ target "javascript" {
   }
 }
 
+target "postgres" {
+  dockerfile = "postgres.Dockerfile"
+  contexts = {
+    base = "target:javascript"
+    build-context = "./postgres"
+  }
+}
+
 target "devcontainer" {
   dockerfile = "devcontainer.Dockerfile"
   contexts = {
-    base = "target:javascript"
+    base = "target:postgres"
     build-context = "./devcontainer"
   }
 }
