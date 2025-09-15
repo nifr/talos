@@ -347,6 +347,7 @@ SETUP_RIPGREP
 # rg --hidden --no-ignore --iglob='!.git/' --smart-case --iglob='!*.js.map' --files-with-matches [..]
 
 ARG TARGETARCH
+# renovate: datasource=github-releases depName=atuin packageName=atuinsh/atuin
 ARG atuin_version='18.8.0'
 ARG atuin_architecture="${TARGETARCH/arm64/aarch64}"
 ARG atuin_architecture="${atuin_architecture/amd64/x86_64}"
@@ -366,3 +367,42 @@ echo '=== [atuin] installation complete.'
 INSTALL_ATUIN
 
 ENV TERMINFO_DIRS='/etc/terminfo:/lib/terminfo:/usr/share/terminfo'
+
+# renovate: datasource=github-releases depName=hcloud-upload-image packageName=apricote/hcloud-upload-image
+ARG hcloud_upload_image_version='1.1.0'
+ARG hcloud_upload_image_architecture="${TARGETARCH}"
+## example url: https://github.com/apricote/hcloud-upload-image/releases/download/v1.1.0/hcloud-upload-image_Linux_arm64.tar.gz
+ARG hcloud_upload_image_download_url="https://github.com/apricote/hcloud-upload-image/releases/download/v${hcloud_upload_image_version}/hcloud-upload-image_Linux_${hcloud_upload_image_architecture}.tar.gz"
+RUN \
+<<'INSTALL_HCLOUD_UPLOAD_IMAGE'
+echo '=== [hcloud-upload-image] download and install ...'
+printf '=== [hcloud-upload-image] download url: %s\n' "${hcloud_upload_image_download_url}"
+curl -sLo- "${hcloud_upload_image_download_url}" \
+| tar -xzf- --to-stdout 'hcloud-upload-image' \
+| install --mode=755 /dev/stdin /usr/local/bin/hcloud-upload-image
+
+echo '=== [hcloud-upload-image] print version'
+hcloud-upload-image --version
+echo '=== [hcloud-upload-image] installation complete.'
+INSTALL_HCLOUD_UPLOAD_IMAGE
+
+## see: https://github.com/GreenmaskIO/greenmask/releases
+# renovate: datasource=github-releases depName=greenmask packageName=GreenmaskIO/greenmask
+ARG greenmask_version='0.2.13'
+ARG greenmask_architecture="${TARGETARCH}"
+## example url: https://github.com/GreenmaskIO/greenmask/releases/download/v0.2.13/greenmask-linux-arm64.tar.gz
+ARG greenmask_download_url="https://github.com/GreenmaskIO/greenmask/releases/download/v${greenmask_version}/greenmask-linux-${greenmask_architecture}.tar.gz"
+RUN \
+<<'INSTALL_GREENMASK'
+echo '=== [greenmask] download and install ...'
+printf '=== [greenmask] download url: %s\n' "${greenmask_download_url}"
+curl -sLo- "${greenmask_download_url}" \
+| tar -xzf- --to-stdout 'greenmask' \
+| install --mode=755 /dev/stdin /usr/local/bin/greenmask
+
+echo '=== [greenmask] print version'
+greenmask --version
+echo '=== [greenmask] installation complete.'
+INSTALL_GREENMASK
+
+# @todo: add back "devcontainer.metadata" label
