@@ -1,0 +1,5 @@
+cluster:
+  apiServer:
+    extraArgs:
+      # allow cloud controller to manage all service node ports (30000-32767 by default)
+      service-node-port-range: '1-65535'

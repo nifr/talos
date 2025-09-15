@@ -1,0 +1,5 @@
+# in order to allow scheduling pods on control plane nodes we need to set 
+# config key "cluster.allowSchedulingOnControlPlanes" to true
+# see: https://www.talos.dev/v1.7/talos-guides/howto/workers-on-controlplane/
+cluster:
+  allowSchedulingOnControlPlanes: true

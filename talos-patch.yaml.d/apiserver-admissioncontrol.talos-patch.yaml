@@ -1,0 +1,12 @@
+# see: https://www.talos.dev/v1.10/kubernetes-guides/configuration/pod-security/
+# in order to relax the PodSecurity admission controller for the traefik namespace
+# command example: 
+# kubectl label ns traefik pod-security.kubernetes.io/enforce=privileged
+cluster:
+  apiServer:
+    admissionControl:
+    - name: PodSecurity
+      configuration:
+        exemptions:
+          namespaces:
+          - traefik
