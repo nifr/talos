@@ -29,20 +29,21 @@ ARG pkgm_packages_whitelist=' \
   vivid \
   yj \
   yq \
-'
-
-ARG pkgm_packages_blacklist=' \
+  '
+  
+  ARG pkgm_packages_blacklist=' \
   bat \
   biome \
+  delta \
   eza \
   fnm \
+  infracost \
   lazygit \
-  delta \
+  pulumi \
   terraform \
   terragrunt \
   terraform-cdk \
   mise \
-  infracost \
 '
 
 ## see:  https://github.com/oven-sh/bun/releases
