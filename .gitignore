@@ -1,3 +1,22 @@
 /.devcontainer/.secrets/*
 !/.devcontainer/.secrets/.gitkeep
 /node_modules/
+
+# postgresql dumps
+*.sql
+*.dump
+*.pg_dump
+*.pg_dump.gz
+*.sql.gz
+
+# created by talosctl
+talosconfig
+controlplane.yaml
+worker.yaml
+kubeconfig
+
+# dotenv managed env-files, created by vscode plugin "dotenv.dotenv-vscode" or "dotenv" cli (NodeJS)
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
