@@ -73,6 +73,14 @@ target "postgres" {
   }
 }
 
+target "mcp-toolbox" {
+  dockerfile = "mcp-toolbox.Dockerfile"
+  contexts = {
+    base = "target:postgres"
+    build-context = "./mcp-toolbox"
+  }
+}
+
 target "devcontainer" {
   dockerfile = "devcontainer.Dockerfile"
   contexts = {

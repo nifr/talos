@@ -1,0 +1,37 @@
+version: "0.5"
+is_strict: true
+
+processes:
+
+  mcp-toolbox:
+    namespace: mcp-servers
+    description: 'runs Google genai-toolbox MCP server'
+    working_dir: '/'
+    depends_on:
+      postgres:
+        condition: process_log_ready
+    command: |
+      mcp-toolbox \
+        --address '0.0.0.0' \
+        --port '8006' \
+        --logging-format 'json' \
+        --log-level 'debug' \
+        --tools-folder '/opt/mcp-toolbox/tools.yaml.d' \
+        --ui
+    # --telemetry-otlp 'http://127.0.0.1:4318'
+    # --telemetry-service-name 'mcp-toolbox'
+    ready_log_line: 'server listening on 0.0.0.0:8006'
+    log_location: /var/log/mcp-toolbox.service.log
+    log_configuration:
+      fields_order: ["message"]
+      disable_json: true
+      no_metadata: true
+      add_timestamp: false
+      no_color: true
+      flush_each_line: false
+      rotation:
+        max_size_mb: 10
+        max_age_days: 1
+        max_backups: 1
+        compress: false
+
