@@ -7,6 +7,7 @@ FROM build-context
 FROM base
 SHELL ["/bin/bash","--noprofile","--norc","-o","nounset","-o","errexit","-o","pipefail","-o","noclobber","-c"]
 ARG TARGETARCH
+ARG DEBIAN_FRONTEND='noninteractive'
 
 ARG name='postgres'
 ARG postgresql_version='17'
