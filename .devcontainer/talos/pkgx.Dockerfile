@@ -1,7 +1,6 @@
-## syntax=docker/dockerfile:1-labs
-## check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
+# check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
 
-ARG base_image='docker.io/library/debian:12-slim'
+ARG base_image='docker.io/library/debian:trixie-slim'
 FROM "${base_image}" AS base
 
 FROM base
