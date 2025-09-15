@@ -8,12 +8,8 @@ target "debian" {
 
 target "pkgx" {
   dockerfile = "pkgx.Dockerfile"
-  context = "."
   contexts = {
     "base" = "target:debian"
-  }
-  args = {
-    base_image = "docker.io/library/debian:13-slim"
   }
 }
 
