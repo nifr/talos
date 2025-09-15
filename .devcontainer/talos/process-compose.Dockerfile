@@ -16,7 +16,7 @@ ARG PROC_COMP_CONFIG='/opt/process-compose'
 ENV PROC_COMP_CONFIG="${PROC_COMP_CONFIG}"
 
 ARG build_context_mount_path='/mnt/build-context/process-compose'
-ARG process_compose_config_target="/opt/process-compose/config/process-compose.yml"
+ARG process_compose_config_target="${PROC_COMP_CONFIG}/config/process-compose.yml"
 RUN \
   --mount=from=build-context,target=${build_context_mount_path} \
   <<'INSTALL_PROCESS_COMPOSE'
