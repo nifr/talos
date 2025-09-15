@@ -35,19 +35,18 @@ target "process-compose" {
   }
 }
 
-target "docker" {
-  dockerfile = "docker.Dockerfile"
+target "docker-in-docker" {
+  dockerfile = "docker-in-docker.Dockerfile"
   contexts = {
     "base" = "target:process-compose"
-    "build-context" = "./docker"
-    "source-code" = "https://github.com/docker/mcp-gateway.git#v0.18.0"
+    "build-context" = "./docker-in-docker"
   }
 }
 
 target "javascript" {
   dockerfile = "javascript.Dockerfile"
   contexts = {
-    "base" = "target:docker"
+    "base" = "target:docker-in-docker"
     "npm-config" = "./javascript/npm-config"
   }
 }
