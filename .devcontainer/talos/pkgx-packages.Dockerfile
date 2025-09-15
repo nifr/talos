@@ -1,9 +1,8 @@
-# syntax=docker/dockerfile:1-labs
 # check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
 
 ## requires "pkgx" and "sudo" to be installed
 
-ARG base_image='docker.io/library/debian:12-slim'
+ARG base_image='docker.io/library/debian:trixie-slim'
 FROM "${base_image}" AS base
 
 FROM base
