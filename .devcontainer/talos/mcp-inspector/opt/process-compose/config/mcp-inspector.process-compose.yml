@@ -1,0 +1,39 @@
+version: "0.5"
+is_strict: true
+
+processes:
+  mcp-inspector:
+    namespace: mcp-servers
+    description: 'runs MCP Inspector'
+    working_dir: '/'
+    ## note:  bun sometimes has concurrency issues when running the mcp-inspector, therefore we restart it on failure
+    ## error: "Bun could not find a file, and the code that produces this error is missing a better error."
+    availability:
+      restart: on_failure
+      backoff_seconds: 2
+      max_restarts: 3
+    command: |
+      bunx \
+        @modelcontextprotocol/inspector
+    environment:
+      - 'HOST=0.0.0.0'
+      - 'CLIENT_PORT=6274'
+      - 'SERVER_PORT=6277'
+      - 'DANGEROUSLY_OMIT_AUTH=true'
+      - 'MCP_AUTO_OPEN_ENABLED=false'
+      - 'ALLOWED_ORIGINS=http://localhost:6274,http://127.0.0.1:6274,http://127.0.0.1:*,https://*.app.github.dev'
+    ready_log_line: 'MCP Inspector is up and running at'
+    log_location: /var/log/mcp-inspector.service.log
+    log_configuration:
+      fields_order: ["message"]
+      disable_json: true
+      no_metadata: true
+      add_timestamp: false
+      no_color: true
+      flush_each_line: false
+      rotation:
+        max_size_mb: 10
+        max_age_days: 1
+        max_backups: 1
+        compress: false
+
