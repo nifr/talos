@@ -51,10 +51,24 @@ target "javascript" {
   }
 }
 
+target "biome" {
+  dockerfile = "biome.Dockerfile"
+  contexts = {
+    "base" = "target:javascript"
+  }
+}
+
+target "python" {
+  dockerfile = "python.Dockerfile"
+  contexts = {
+    "base" = "target:biome"
+  }
+}
+
 target "postgres" {
   dockerfile = "postgres.Dockerfile"
   contexts = {
-    base = "target:javascript"
+    base = "target:python"
     build-context = "./postgres"
   }
 }
