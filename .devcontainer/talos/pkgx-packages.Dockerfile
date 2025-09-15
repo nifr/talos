@@ -286,3 +286,8 @@ for name in "${pkgm_packages_whitelist_array[@]}"; do
 done
 
 INSTALL_PACKAGES
+
+## @todo VSCode extensions for packages:
+## - shfmt: mkhl.shfmt
+## - pulumi: pulumi.pulumi-lsp-client , pulumi.pulumi-vscode-copilot
+## - taplo: tamasfe.even-better-toml

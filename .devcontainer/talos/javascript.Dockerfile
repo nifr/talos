@@ -1,4 +1,3 @@
-## syntax=docker/dockerfile:1-labs
 # check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
 
 ARG base_image='docker.io/library/debian:12-slim'
@@ -135,3 +134,9 @@ npm install -g "npm@${npm_version}"
 corepack install --global "pnpm@${pnpm_version}"
 corepack install --global "yarn@${yarn_version}"
 INSTALL_NODE
+
+## @todo: add back "devcontainer.metadata" label
+
+## @todo: integrate oxc
+## see: https://oxc.rs/docs/guide/usage/linter/config.html
+##
