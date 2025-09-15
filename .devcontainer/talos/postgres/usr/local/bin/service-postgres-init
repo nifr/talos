@@ -128,8 +128,8 @@ s6-setuidgid "${postgresql_user_name}" initdb \
   --set="log_checkpoints=on" \
   --set="log_autovacuum_min_duration=0" \
   --set="timezone=Etc/UTC" \
-  --set="max_connections=6" \
-  --set="superuser_reserved_connections=1" \
+  --set="max_connections=100" \
+  --set="superuser_reserved_connections=10" \
   --set="shared_buffers=128MB" \
   --set="effective_cache_size=384MB" \
   --set="work_mem=4MB" \
