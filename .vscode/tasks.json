@@ -2,12 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "docker:buildx bake",
+      "label": "docker:docker buildx bake",
       "hide": false,
       "command": "docker",
       "args": [
         "buildx",
         "bake",
+        "--no-cache",
+        "--debug",
         "--allow=security.insecure",
         "--progress=plain",
         "${input:buildx-target}",
@@ -28,6 +30,164 @@
         "clear": true,
       },
     },
+  {
+      "label": "docker:docker context ls",
+      "hide": false,
+      "command": "docker",
+      "args": [
+        "context",
+        "ls"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "docker:context",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi login",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "login",
+        "--non-interactive",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi up",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "up",
+        "--non-interactive",
+        "--yes",
+        "--copilot",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi destroy",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "destroy",
+        "--non-interactive",
+        "--yes",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi stack ls",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "stack",
+        "ls",
+        "--fully-qualify-stack-names",
+        "--json",
+        "--non-interactive",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "pulumi:pulumi login"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi stack output",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "stack",
+        "output",
+        "--non-interactive",
+        "--json"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "pulumi:pulumi login"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    }
   ],
   "inputs": [
     {
