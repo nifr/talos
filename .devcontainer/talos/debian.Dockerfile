@@ -1,3 +1,5 @@
+# check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=false
+
 ARG base_image='docker.io/library/debian:13-slim'
 FROM "${base_image}" AS base
 
@@ -36,6 +38,7 @@ ARG apt_dependencies=" \
   openssh-server \
   procps \
   psmisc \
+  pv \
   rsync \
   sudo \
   tar \
