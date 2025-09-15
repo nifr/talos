@@ -325,37 +325,10 @@ SETUP_LAZYGIT
 ## start: [lazygit:vscode]
 ## note:  enables lazygit toggle in VSCode with CMD+Shift+L
 ## note:  "lazygit-vscode.autoMaximizeWindow": true -> has issues! opens Copilot every time lazygit is opened
-ENV _devcontainer_metadata_to_add='[{ \
-  "customizations": { \
-    "vscode": { \
-      "extensions": [ \
-\
-        "TomPollak.lazygit-vscode" \
-\
-      ], \
-      "settings": { \
-\
-        "telemetry.telemetryLevel": "off", \
-\
-        "lazygit-vscode.autoMaximizeWindow": false, \
-        "lazygit-vscode.panels": { \
-            "sidebar": "hide", \
-            "panel": "hide", \
-            "secondarySidebar": "keep" \
-        }, \
-        "terminal.integrated.sendKeybindingsToShell": false, \
-        "terminal.integrated.commandsToSkipShell": [ \
-            "lazygit-vscode.toggle", \
-            "workbench.action.closeWindow" \
-        ] \
-\
-      } \
-    } \
-  } \
-}]'
-ENV _devcontainer_metadata="${_devcontainer_metadata%\}]}    },    ${_devcontainer_metadata_to_add#[}"
-ENV _devcontainer_metadata_to_add=
-LABEL devcontainer.metadata="${_devcontainer_metadata}"
+
+# @TODO: Removed for now too large label "devcontainer.metadata" triggers build error:
+# > ERROR: target talos: failed to solve: exit code: 255
+
 ## end: [lazygit:vscode]
 
 ARG RIPGREP_CONFIG_PATH='/etc/xdg/ripgrep/ripgreprc'
