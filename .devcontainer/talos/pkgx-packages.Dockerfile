@@ -21,7 +21,6 @@ ARG pkgm_packages_whitelist=' \
   jq \
   lego \
   packer \
-  pulumi \
   restic \
   rg \
   shfmt \
