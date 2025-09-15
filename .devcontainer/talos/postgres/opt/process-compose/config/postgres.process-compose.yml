@@ -9,7 +9,7 @@ processes:
     working_dir: '/'
     command: |
       service-postgres
-    # ready_log_line: 'API listen on /var/run/postgres.sock'
+    ready_log_line: 'Starting service'
     log_location: /var/log/postgres.service.log
     log_configuration:
       fields_order: ["message"]
