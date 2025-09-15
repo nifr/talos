@@ -6,6 +6,11 @@
     "--hostname=talos",
     "--privileged"
   ],
+  "portsAttributes": {
+    "*": {
+        "onAutoForward": "ignore"
+    }
+  },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "./features/talosctl": {
