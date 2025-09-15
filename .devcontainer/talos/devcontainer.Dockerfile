@@ -1,16 +1,27 @@
-## syntax=docker/dockerfile:1-labs
 # check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
 
 ## -> error -> ERROR: target devcontainer-galawork: failed to solve: exit code: 255
 ARG base_image='docker.io/library/debian:12-slim'
 
 FROM "${base_image}" AS base
-
-FROM build-context
+SHELL ["/bin/bash","--noprofile","--norc","-o","nounset","-o","errexit","-o","pipefail","-o","noclobber","-c"]
+RUN <<'INSTALL_DEPENDENCIES'
+echo '=== update apt package lists ...'
+apt-get update
+echo '=== install required apt packages ...'
+apt-get install \
+  --yes \
+  --no-install-recommends \
+  --no-install-suggests \
+    ca-certificates \
+    curl \
+    tar
+INSTALL_DEPENDENCIES
 FROM base
 
 FROM base AS delta
 ARG TARGETARCH
+# renovate: datasource=github-releases depName=delta packageName=dandavison/delta
 ARG delta_version='0.18.2'
 ARG delta_architecture="${TARGETARCH/arm64/aarch64}"
 ARG delta_architecture="${delta_architecture/amd64/x86_64}"
@@ -31,6 +42,7 @@ INSTALL_DELTA
 
 FROM base AS bat
 ARG TARGETARCH
+# renovate: datasource=github-releases depName=bat packageName=sharkdp/bat
 ARG bat_version='0.25.0'
 ARG bat_architecture="${TARGETARCH/arm64/aarch64}"
 ARG bat_architecture="${bat_architecture/amd64/x86_64}"
@@ -51,6 +63,7 @@ INSTALL_BAT
 
 FROM base AS eza
 ARG TARGETARCH
+# renovate: datasource=github-releases depName=eza packageName=eza-community/eza
 ARG eza_version='0.23.0'
 ARG eza_architecture="${TARGETARCH/arm64/aarch64}"
 ARG eza_architecture="${eza_architecture/amd64/x86_64}"
@@ -70,6 +83,7 @@ INSTALL_EZA
 
 FROM base AS lazygit
 ARG TARGETARCH
+# renovate: datasource=github-releases depName=lazygit packageName=jesseduffield/lazygit
 ARG lazygit_version='0.53.0'
 ## https://github.com/jesseduffield/lazygit/releases/download/v0.53.0/lazygit_0.53.0_Linux_arm64.tar.gz
 ## https://github.com/jesseduffield/lazygit/releases/download/v0.53.0/lazygit_0.53.0_Linux_x86_64.tar.gz
@@ -311,7 +325,6 @@ SETUP_LAZYGIT
 ## start: [lazygit:vscode]
 ## note:  enables lazygit toggle in VSCode with CMD+Shift+L
 ## note:  "lazygit-vscode.autoMaximizeWindow": true -> has issues! opens Copilot every time lazygit is opened
-ARG _devcontainer_metadata="${_devcontainer_metadata:-[{\}]}"
 ENV _devcontainer_metadata_to_add='[{ \
   "customizations": { \
     "vscode": { \
