@@ -1,6 +1,5 @@
 target "debian" {
   dockerfile = "debian.Dockerfile"
-  context = "."
   args = {
     base_image = "docker.io/library/debian:13-slim"
   }
@@ -81,10 +80,32 @@ target "mcp-toolbox" {
   }
 }
 
+target "pgcli" {
+  dockerfile = "pgcli.Dockerfile"
+  contexts = {
+    base = "target:mcp-toolbox"
+  }
+}
+
+target "pulumi" {
+  dockerfile = "pulumi.Dockerfile"
+  contexts = {
+    base = "target:pgcli"
+  }
+  target = "final"
+}
+
+target "kubernetes" {
+  dockerfile = "kubernetes.Dockerfile"
+  contexts = {
+    base = "target:pulumi"
+  }
+}
+
 target "devcontainer" {
   dockerfile = "devcontainer.Dockerfile"
   contexts = {
-    base = "target:postgres"
+    base = "target:kubernetes"
     build-context = "./devcontainer"
   }
 }
@@ -96,7 +117,7 @@ target "talos" {
   dockerfile = "talos.Dockerfile"
   args = {
     base_image = "docker.io/library/debian:13-slim"
-    BUILDKIT_SYNTAX = "docker/dockerfile:1.17.1-labs"
+    BUILDKIT_SYNTAX = "docker/dockerfile:1.18.0-labs"
   }
   no-cache = true
   entitlements = [
@@ -116,6 +137,7 @@ target "talos" {
   ]
   output = [ 
     "type=docker",
+    "type=registry",
   ]
 }
 
