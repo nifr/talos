@@ -52,6 +52,8 @@ ARG _devcontainer_metadata='[{ \
         "editor.renderControlCharacters": true, \
         "editor.renderFinalNewline": "dimmed", \
 \
+        "explorer.fileNesting.enabled": true, \
+\
         "chat.tools.autoApprove": true, \
 \
         "task.autoDetect": "off", \
