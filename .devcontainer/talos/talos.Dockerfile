@@ -60,6 +60,9 @@ ARG _devcontainer_metadata='[{ \
         "task.quickOpen.history": 0, \
         "task.allowAutomaticTasks": "on", \
 \
+        "files.trimTrailingWhitespace": true, \
+        "files.insertFinalNewline": true, \
+        "files.trimFinalNewlines": true, \
         "files.associations": { \
           ".env.*": "dotenv", \
           "**/.vscode/*.json": "jsonc", \
@@ -203,6 +206,10 @@ ARG _devcontainer_metadata='[{ \
             "source.organizeImports.biome": "explicit", \
             "source.fixAll.biome": "explicit" \
           } \
+        }, \
+\
+        "[markdown]": { \
+          "files.trimTrailingWhitespace": false \
         } \
 \
       } \
