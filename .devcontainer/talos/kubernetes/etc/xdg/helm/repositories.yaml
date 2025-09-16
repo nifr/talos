@@ -87,6 +87,8 @@ repositories:
   url: https://helm.redis.io/
 - name: sealed-secrets
   url: https://bitnami-labs.github.io/sealed-secrets
+- name: stakater
+  url: https://stakater.github.io/stakater-charts
 - name: traefik
   url: https://traefik.github.io/charts
 - name: vmware-tanzu
