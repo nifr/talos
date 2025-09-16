@@ -215,6 +215,8 @@ declare -ra postgresql_extensions=(
   "hstore"
   "uuid-ossp"
   "postgis"
+  "pgcrypto"
+  "pg_trgm"
 )
 for extension_name in "${postgresql_extensions[@]}"; do
 
