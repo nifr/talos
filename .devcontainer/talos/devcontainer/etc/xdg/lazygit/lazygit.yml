@@ -1,7 +1,39 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 ## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 disableStartupPopups: true
+
+## disable periodic update checks
+update:
+  method: 'never'
+
+## skip showing the "not a git repository" message in non-git folders, do not auto-initialize a repo
+## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#launching-not-in-a-repository-behaviour
+notARepository: 'skip'
+
+gui:
+  # Window border style.
+  # One of 'rounded' (default) | 'single' | 'double' | 'hidden' | 'bold'
+  border: single
+
+  # Nerd fonts version to use.
+  # One of: '2' | '3' | empty string (default)
+  # If empty, do not show icons.
+  nerdFontsVersion: '3'
+
+  # If true, show the number of lines changed per file in the Files view
+  showNumstatInFilesView: true
+
+  # If true, show a random tip in the command log when Lazygit starts
+  showRandomTip: false
+
+  # If true, show the command log
+  showCommandLog: false
+
+  # If true, show the bottom line that contains keybinding info and useful buttons. If false, this line will be hidden except to display a loader for an in-progress action.
+  showBottomLine: false
+
 os:
+  ## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#configuring-file-editing
   editPreset: 'vscode'
   copyToClipboardCmd: >
     if [[ "$TERM" =~ ^(screen|tmux) ]]; then
@@ -9,3 +41,20 @@ os:
     else
       printf "\033]52;c;$(printf {{text}} | base64 -w 0)\a" > /dev/tty
     fi
+
+git:
+  ## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#predefined-commit-message-prefix
+  commitPrefix:
+    - pattern: "^\\w+\\/(\\w+-\\d+)(\\/|\\-)?.*"
+      ## this pattern detects branch names like:
+      ## ${word}/DEV-1234/${anything}
+      ## ${word}/DEV-1234-${anything}
+      ## and captures the ticket ID (e.g. DEV-1234) in group 1
+      ## and then uses that to prefix the commit message with "DEV-1234 "
+      replace: '$1 '
+  paging:
+    ## use "delta" as git diff pager in lazygit
+    ## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md#delta
+    ## see: https://github.com/dandavison/delta
+    colorArg: 'always'
+    pager: 'delta --dark --line-numbers --syntax-theme="Visual Studio Dark+" --paging=never'
