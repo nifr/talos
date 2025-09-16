@@ -61,6 +61,8 @@ repositories:
   url: https://helm.linkerd.io/stable
 - name: longhorn
   url: https://charts.longhorn.io
+- name: meilisearch
+  url: https://meilisearch.github.io/meilisearch-kubernetes
 - name: metallb
   url: https://metallb.github.io/metallb
 - name: metrics-server
