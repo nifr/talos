@@ -105,6 +105,18 @@ if (( $+commands[hcloud-upload-image] )); then
   source <(hcloud-upload-image completion zsh)
 fi
 
+if (( $+commands[kubectl] )); then
+  source <(kubectl completion zsh)
+fi
+
+if (( $+commands[helm] )); then
+  source <(helm completion zsh)
+fi
+
+if (( $+commands[k9s] )); then
+  source <(k9s completion zsh)
+fi
+
 ## note: direnv zsh completion is part of zsh-users/zsh-completions
 if (( $+commands[direnv] )); then
   source <(direnv hook zsh)
