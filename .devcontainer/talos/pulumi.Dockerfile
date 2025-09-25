@@ -10,7 +10,7 @@ FROM base AS pulumi
 ARG TARGETARCH
 ## see https://github.com/pulumi/pulumi/releases
 # renovate: datasource=github-releases depName=pulumi packageName=pulumi/pulumi
-ARG pulumi_version='3.193.0'
+ARG pulumi_version='3.197.0'
 
 ARG pulumi_architecture="${TARGETARCH}"
 ARG pulumi_architecture="${pulumi_architecture/amd64/x64}"
