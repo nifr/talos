@@ -17,6 +17,18 @@ ARG pulumi_architecture="${pulumi_architecture/amd64/x64}"
 ## example url: https://github.com/pulumi/pulumi/releases/download/v3.196.0/pulumi-v3.196.0-linux-x64.tar.gz
 ARG pulumi_download_url="https://github.com/pulumi/pulumi/releases/download/v${pulumi_version}/pulumi-v${pulumi_version}-linux-${pulumi_architecture}.tar.gz"
 
+ARG esc_version='0.18.0'
+ARG esc_architecture="${TARGETARCH}"
+ARG esc_architecture="${esc_architecture/amd64/x64}"
+## example url: https://github.com/pulumi/esc/releases/download/v0.18.0/esc-v0.18.0-linux-arm64.tar.gz
+ARG esc_download_url="https://github.com/pulumi/esc/releases/download/v${esc_version}/esc-v${esc_version}-linux-${esc_architecture}.tar.gz"
+
+ARG crd2pulumi_version='1.7.0'
+ARG crd2pulumi_architecture="${TARGETARCH}"
+## example url: https://github.com/pulumi/crd2pulumi/releases/download/v1.5.4/crd2pulumi-v1.5.4-linux-amd64.tar.gz
+ARG crd2pulumi_download_url="https://github.com/pulumi/crd2pulumi/releases/download/v${crd2pulumi_version}/crd2pulumi-v${crd2pulumi_version}-linux-${crd2pulumi_architecture}.tar.gz"
+
+# hadolint ignore=DL3008
 RUN \
 <<'INSTALL_PULUMI'
 echo '=== update apt package lists ...'
@@ -48,6 +60,20 @@ curl -sLo- "${pulumi_download_url}" \
     pulumi/pulumi-analyzer-policy \
     pulumi/pulumi-language-nodejs \
     pulumi/pulumi-resource-pulumi-nodejs
+
+printf '=== [pulumi] download and extract pulumi ESC from url "%s"\n' \
+  "${esc_download_url}"
+curl -sLo- "${esc_download_url}" \
+| \
+  tar -xz --strip-components=1 -C /opt/pulumi \
+    esc/esc
+
+printf '=== [pulumi] download and extract crd2pulumi from url "%s"\n' \
+  "${crd2pulumi_download_url}"
+curl -sLo- "${crd2pulumi_download_url}" \
+| \
+  tar -xz -C /opt/pulumi/bin \
+    crd2pulumi
 INSTALL_PULUMI
 
 FROM base AS final
@@ -60,6 +86,7 @@ COPY \
   /opt/pulumi/pulumi-analyzer-policy \
   /opt/pulumi/pulumi-language-nodejs \
   /opt/pulumi/pulumi-resource-pulumi-nodejs \
+  /opt/pulumi/esc \
   /usr/local/bin/
 
 ENV PULUMI_COPILOT='true'
