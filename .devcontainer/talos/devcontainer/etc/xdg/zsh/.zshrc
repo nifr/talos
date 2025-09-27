@@ -117,6 +117,22 @@ if (( $+commands[k9s] )); then
   source <(k9s completion zsh)
 fi
 
+if (( $+commands[talosctl] )); then
+  source <(talosctl completion zsh)
+fi
+
+if (( $+commands[pulumi] )); then
+  source <(pulumi completion zsh)
+fi
+
+if (( $+commands[esc] )); then
+  source <(esc completion zsh)
+fi
+
+if (( $+commands[crd2pulumi] )); then
+  source <(crd2pulumi completion zsh)
+fi
+
 ## note: direnv zsh completion is part of zsh-users/zsh-completions
 if (( $+commands[direnv] )); then
   source <(direnv hook zsh)
