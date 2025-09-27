@@ -47,6 +47,8 @@ repositories:
   url: https://jaegertracing.github.io/helm-charts
 - name: jenkins
   url: https://charts.jenkins.io
+- name: juicefs
+  url: https://juicedata.github.io/charts/
 - name: kasten
   url: https://charts.kasten.io/
 - name: knative-operator
