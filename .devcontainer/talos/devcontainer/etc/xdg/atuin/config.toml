@@ -1,0 +1,42 @@
+## see: https://docs.atuin.sh/configuration/config/
+
+db_path = "/opt/atuin/data/history.db"
+key_path = "/opt/atuin/data/atuin-key"
+session_path = "/opt/atuin/data/atuin-session"
+
+update_check = false
+
+workspaces = true
+## atuin show all records from all hosts, folders, etc. by default
+## filter_mode = "workspace" filters records by git repository
+## see: https://docs.atuin.sh/configuration/config/#filter_mode
+filter_mode = "workspace"
+
+filter_mode_shell_up_key_binding = "global"
+
+## sync_frequency=0 means sync after EVERY command
+sync_frequency = "0"
+
+## enable sync version 2
+[sync]
+records = true
+
+[dotfiles]
+enabled = true
+
+[theme]
+## included: "" (default), "autumn", "marine"
+## see: https://docs.atuin.sh/guide/theming/
+## see: ATUIN_THEME_DIR, default: ~/.config/atuin/themes/
+## example: ~/.config/atuin/themes/${theme_name}.toml
+##
+## ```toml
+## [theme]
+## name = "my-theme"
+## parent = "autumn"
+## [colors]
+## AlertInfo = "green"
+## Guidance = "#888844"
+## ```
+##
+name = ""
