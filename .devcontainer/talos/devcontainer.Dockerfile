@@ -447,4 +447,28 @@ greenmask --version
 echo '=== [greenmask] installation complete.'
 INSTALL_GREENMASK
 
+ARG hadolint_version='2.13.1'
+ARG hadolint_architecture="${TARGETARCH}"
+## example url: https://github.com/hadolint/hadolint/releases/download/v2.13.1/hadolint-linux-arm64
+ARG hadolint_download_url="https://github.com/hadolint/hadolint/releases/download/v${hadolint_version}/hadolint-linux-${hadolint_architecture}"
+RUN \
+<<'INSTALL_HADOLINT'
+echo '=== [hadolint] download and install ...'
+printf '=== [hadolint] download url: %s\n' \
+  "${hadolint_download_url}"
+curl \
+  -sLo- \
+    "${hadolint_download_url}" \
+| install \
+    --owner='root' \
+    --group='root' \
+    --mode='755' \
+      /dev/stdin \
+      /usr/local/bin/hadolint
+
+echo '=== [hadolint] print version'
+hadolint --version
+echo '=== [hadolint] installation complete.'
+INSTALL_HADOLINT
+
 # @todo: add back "devcontainer.metadata" label
