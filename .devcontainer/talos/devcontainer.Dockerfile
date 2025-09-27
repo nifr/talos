@@ -353,7 +353,17 @@ ARG atuin_architecture="${TARGETARCH/arm64/aarch64}"
 ARG atuin_architecture="${atuin_architecture/amd64/x86_64}"
 ARG atuin_download_url="https://github.com/atuinsh/atuin/releases/download/v${atuin_version}/atuin-${atuin_architecture}-unknown-linux-gnu.tar.gz"
 ## example url: https://github.com/atuinsh/atuin/releases/download/v18.8.0/atuin-aarch64-unknown-linux-gnu.tar.gz
+
+ENV ATUIN_CONFIG_DIR='/etc/xdg/atuin'
+ENV ATUIN_THEME_DIR='/opt/atuin/themes'
+## atuin data folders
+ENV ATUIN_RECORD_STORE_PATH='/opt/atuin/data/atuin_records.db'
+ENV ATUIN_DB_PATH='/opt/atuin/data/atuin.db'
+ENV ATUIN_KV__DB_PATH='/opt/atuin/data/atuin_kv.db'
+ENV ATUIN_SCRIPTS__DB_PATH='/opt/atuin/data/atuin_scripts.db'
+
 RUN \
+  --mount=from=build-context,target=${build_context_mount_path} \
 <<'INSTALL_ATUIN'
 echo '=== [atuin] download and install ...'
 printf '=== [atuin] download url: %s\n' "${atuin_download_url}"
@@ -363,6 +373,38 @@ curl -sLo- "${atuin_download_url}" \
 
 echo '=== [atuin] print version'
 atuin --version
+
+echo '=== [atuin] ensure config folder exists'
+install \
+  --directory \
+  --owner='root' \
+  --group='root' \
+  --mode='2777' \
+  /etc/xdg/ \
+  "${ATUIN_CONFIG_DIR:?}"
+
+echo '=== [atuin] install default config file'
+install \
+  --owner='root' \
+  --group='root' \
+  --mode='777' \
+  {${build_context_mount_path},}${ATUIN_CONFIG_DIR}/config.toml
+
+echo '=== [atuin] ensure data and theme folders exists'
+install \
+  --directory \
+  --owner='root' \
+  --group='root' \
+  --mode='2777' \
+    /opt/atuin/ \
+    /opt/atuin/data/ \
+    "${ATUIN_THEME_DIR:?}"
+
+echo '=== [atuin] install zsh completions'
+atuin gen-completions \
+  --shell='zsh' \
+  --out-dir='/usr/local/share/zsh/site-functions'
+
 echo '=== [atuin] installation complete.'
 INSTALL_ATUIN
 
