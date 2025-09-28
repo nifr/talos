@@ -46,13 +46,18 @@ const defaultLabels = {
 	"talos-cluster": clusterName,
 };
 
+// const cloudflareAccountId: string = "a22cac4379fd6fff1ede31d3efb7841e";
+const cloudflareZoneId: string =
+	config.requireObject<CloudflareConfig>("cloudflare").zone.id ||
+	"e7b95bfe4563d33b2520138e8ef75761";
+
 /**
  * We use ${clusterName}.k8s.nifr.de as the FQDN for our Talos cluster
  * We create a DNS A record for ${clusterName}.k8s.nifr.de
  * We create a wildcard DNS record for *.${clusterName}.k8s.nifr.de
  */
 const domain =
-	config.requireObject<CloudflareConfig>("cloudflare").zone.domain || "nifr.de";
+	config.getObject<CloudflareConfig>("cloudflare")?.zone?.domain || "nifr.de";
 const subdomain: string = "k8s";
 const fqdn = `${clusterName}${subdomain ? `.${subdomain}` : ""}.${domain}`;
 
@@ -60,7 +65,7 @@ const fqdn = `${clusterName}${subdomain ? `.${subdomain}` : ""}.${domain}`;
  * This is the image ID for the ISO we uploaded to Hetzner Cloud with `hcloud-upload-image [..]`
  */
 const serverImageId: string =
-	config.requireObject<HetznerConfig>("hcloud").image.id || "316900484";
+	config.getObject<HetznerConfig>("hcloud")?.image?.id || "316900484";
 
 if (!serverImageId) {
 	throw new Error("Server image ID not found in Pulumi config 'hcloud'.");
@@ -96,11 +101,6 @@ const serverType: HetznerServerType = "cax31";
 // 		"Registry password for 'ghcr.io' not found in Pulumi config 'registries'.",
 // 	);
 // }
-
-// const cloudflareAccountId: string = "a22cac4379fd6fff1ede31d3efb7841e";
-const cloudflareZoneId: string =
-	config.requireObject<CloudflareConfig>("cloudflare").zone.id ||
-	"e7b95bfe4563d33b2520138e8ef75761";
 
 //#endregion Pulumi:Configuration
 
@@ -733,7 +733,11 @@ const traefikNamespace = new k8s.core.v1.Namespace(
 			},
 		},
 	},
-	{ provider: k8sProvider, dependsOn: [k8sProvider], deletedWith: server },
+	{
+		provider: k8sProvider,
+		dependsOn: [k8sProvider, metalLbL2Advertisement],
+		deletedWith: server,
+	},
 );
 
 /**
@@ -972,6 +976,112 @@ const traefikDashboardIngressRoute = new traefik.v1alpha1.IngressRoute(
 );
 
 //#endregion Traefik
+
+/**
+ * [Kubernetes:Dashboard]
+ */
+//#region Kubernetes:Dashboard
+const kubernetesDashboardNamespace = new k8s.core.v1.Namespace(
+	"kubernetes-dashboard-namespace",
+	{
+		metadata: {
+			name: "kubernetes-dashboard",
+			labels: {
+				"pod-security.kubernetes.io/enforce": "privileged",
+				"pod-security.kubernetes.io/audit": "privileged",
+				"pod-security.kubernetes.io/warn": "privileged",
+			},
+		},
+	},
+	{
+		provider: k8sProvider,
+		dependsOn: [k8sProvider],
+		deletedWith: server,
+	},
+);
+
+const kubernetesDashboardClusterRoleBinding =
+	new k8s.rbac.v1.ClusterRoleBinding(
+		`kubernetes-dashboard-cluster-role-binding`,
+		{
+			metadata: {
+				name: "kubernetes-dashboard",
+			},
+			roleRef: {
+				apiGroup: "rbac.authorization.k8s.io",
+				kind: "ClusterRole",
+				name: "cluster-admin",
+			},
+			subjects: [
+				{
+					kind: "ServiceAccount",
+					name: "kubernetes-dashboard",
+					namespace: kubernetesDashboardNamespace.metadata.name,
+				},
+			],
+		},
+		{
+			parent: kubernetesDashboardNamespace,
+			dependsOn: [kubernetesDashboardNamespace],
+		},
+	);
+
+const kubernetesDashboardHelmChart = new k8s.helm.v4.Chart(
+	"helm-chart-kubernetes-dashboard",
+	{
+		chart: "kubernetes-dashboard",
+		/**
+		 *
+		 * helm search repo kubernetes-dashboard --versions
+		 */
+		version: "7.13.0",
+		repositoryOpts: {
+			repo: "https://kubernetes.github.io/dashboard/",
+		},
+		dependencyUpdate: true,
+		skipAwait: false,
+		skipCrds: false,
+		namespace: kubernetesDashboardNamespace.metadata.name,
+		values: {
+			enableInsecureLogin: true,
+			ingress: {
+				enabled: true,
+				annotations: {
+					"traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
+					"traefik.ingress.kubernetes.io/router.tls": "true",
+					"traefik.ingress.kubernetes.io/router.middlewares": `${traefikNamespace.metadata.name}/${traefikMiddlewareRedirectToHttps.metadata.name}@kubernetescrd`,
+				},
+				hosts: [`dashboard.${fqdn}`],
+				tls: {},
+			},
+		},
+	},
+	{
+		provider: k8sProvider,
+		dependsOn: [kubernetesDashboardNamespace, traefikTlsStoreDefault],
+		deletedWith: kubernetesDashboardNamespace,
+	},
+);
+
+const kubernetesDashboardTraefikServersTransport =
+	new traefik.v1alpha1.ServersTransport(
+		"kubernetes-dashboard-traefik-servers-transport-tls-insecure-skip-verify",
+		{
+			metadata: {
+				name: "kubernetes-dashboard-tls-skip-verify",
+				namespace: kubernetesDashboardNamespace.metadata.name,
+			},
+			spec: {
+				insecureSkipVerify: true,
+			},
+		},
+		{
+			parent: kubernetesDashboardNamespace,
+			dependsOn: [kubernetesDashboardNamespace, traefikCrdHelmChart],
+			deletedWith: kubernetesDashboardNamespace,
+		},
+	);
+//#endregion Kubernetes:Dashboard
 
 /**
  * [Cloudflare DNS]
