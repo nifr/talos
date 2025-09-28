@@ -1,0 +1,5 @@
+/.lego/
+/node_modules/
+talosconfig
+kubeconfig
+machineconfig.yaml
