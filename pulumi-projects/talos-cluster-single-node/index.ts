@@ -51,14 +51,20 @@ const defaultLabels = {
  * We create a DNS A record for ${clusterName}.k8s.nifr.de
  * We create a wildcard DNS record for *.${clusterName}.k8s.nifr.de
  */
-const domain = "nifr.de";
+const domain =
+	config.requireObject<CloudflareConfig>("cloudflare").zone.domain || "nifr.de";
 const subdomain: string = "k8s";
 const fqdn = `${clusterName}${subdomain ? `.${subdomain}` : ""}.${domain}`;
 
 /**
  * This is the image ID for the ISO we uploaded to Hetzner Cloud with `hcloud-upload-image [..]`
  */
-const serverImageId: string = "316900484";
+const serverImageId: string =
+	config.requireObject<HetznerConfig>("hcloud").image.id || "316900484";
+
+if (!serverImageId) {
+	throw new Error("Server image ID not found in Pulumi config 'hcloud'.");
+}
 
 /**
  * This is the Talos version we want to install on our servers.
@@ -79,7 +85,7 @@ const location: HetznerLocation = "nbg1";
  */
 const datacenter: HetznerDatacenterAtLocation<typeof location> = "nbg1-dc3";
 
-const serverType: HetznerServerType = "cax11";
+const serverType: HetznerServerType = "cax31";
 
 // const registryPasswordGithub =
 // 	config.requireSecretObject<RegistryAuthConfig>("registries")["ghcr.io"]
@@ -92,7 +98,9 @@ const serverType: HetznerServerType = "cax11";
 // }
 
 // const cloudflareAccountId: string = "a22cac4379fd6fff1ede31d3efb7841e";
-const cloudflareZoneId: string = "e7b95bfe4563d33b2520138e8ef75761";
+const cloudflareZoneId: string =
+	config.requireObject<CloudflareConfig>("cloudflare").zone.id ||
+	"e7b95bfe4563d33b2520138e8ef75761";
 
 //#endregion Pulumi:Configuration
 

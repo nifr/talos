@@ -10,6 +10,19 @@ declare type IpStackConfig = {
 	stack: string;
 };
 
+declare type HetznerConfig = {
+	image: {
+		id: string;
+	};
+};
+
+declare type CloudflareConfig = {
+	zone: {
+		id: string;
+		domain: string;
+	};
+};
+
 // 1. Define a mapping between locations and datacenters
 declare type HetznerLocationToDatacenter = {
 	fsn1: "fsn1-dc14";
