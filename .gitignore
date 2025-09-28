@@ -16,7 +16,7 @@ worker.yaml
 kubeconfig
 
 # dotenv managed env-files, created by vscode plugin "dotenv.dotenv-vscode" or "dotenv" cli (NodeJS)
-.env*
-.flaskenv*
+.env.local
+.env.*.local
 !.env.project
 !.env.vault
