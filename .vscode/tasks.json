@@ -48,7 +48,61 @@
         "reveal": "always",
         "group": "docker:context",
         "focus": false,
-        "panel": "dedicated",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+      {
+      "label": "docker:docker context create host",
+      "hide": false,
+      // docker context create host --description 'Docker Host Socket' --docker 'host=unix:///var/run/docker-host.sock'
+      "command": "docker",
+      "args": [
+        "context",
+        "create",
+        "host",
+        "--description",
+        "Docker Host Socket",
+        "--docker",
+        "host=unix:///var/run/docker-host.sock"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "docker:context",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi preview",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "preview",
+        "--non-interactive",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": false,
+        "panel": "shared",
         "showReuseMessage": false,
         "revealProblems": "never",
         "clear": true
@@ -79,14 +133,14 @@
       }
     },
     {
-      "label": "pulumi:pulumi up",
+      "label": "pulumi:pulumi cancel",
       "hide": false,
       "command": "pulumi",
       "args": [
-        "up",
+        "cancel",
         "--non-interactive",
         "--yes",
-        "--copilot",
+        "--fully-qualify-stack-names",
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -97,7 +151,43 @@
         "echo": false,
         "reveal": "always",
         "group": "pulumi",
-        "focus": false,
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi up",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "up",
+        "--non-interactive",
+        "--yes",
+        "--fully-qualify-stack-names",
+        "--continue-on-error",
+        "--suppress-outputs",
+        "--suppress-permalink",
+        "--suppress-progress",
+        "--copilot",
+        "--debug",
+        "-v=9"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PULUMI_DEBUG_PROMISE_LEAKS": "true"
+        }
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": true,
         "panel": "shared",
         "showReuseMessage": false,
         "revealProblems": "never",
@@ -110,8 +200,13 @@
       "command": "pulumi",
       "args": [
         "destroy",
+        "--exclude-protected",
         "--non-interactive",
         "--yes",
+        "--fully-qualify-stack-names",
+        "--suppress-outputs",
+        "--suppress-permalink",
+        "--suppress-progress",
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -122,7 +217,7 @@
         "echo": false,
         "reveal": "always",
         "group": "pulumi",
-        "focus": false,
+        "focus": true,
         "panel": "shared",
         "showReuseMessage": false,
         "revealProblems": "never",
@@ -187,8 +282,217 @@
         "revealProblems": "never",
         "clear": true
       }
-    }
+    },
+    {
+      "label": "esc:esc login --shared",
+      "hide": false,
+      "command": "esc",
+      "args": [
+        "login",
+        "--shared"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "pulumi:pulumi login"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "esc",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "esc:esc env ls",
+      "hide": false,
+      "command": "esc",
+      "args": [
+        "env",
+        "ls"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "esc:esc login"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "esc",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "direnv:[ vscode: extension-test ]",
+      "hide": false,
+      "command": "echo",
+      "args": [
+        "-e",
+        // see: https://code.visualstudio.com/docs/reference/variables-reference
+        "\\n",
+        "DIRENV_DIR=${env:DIRENV_DIR}",
+        "\\n",
+        "DIRENV_FILE=${env:DIRENV_FILE}",
+        "\\n"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Test the vscode direnv extension integration. Without the extension this will print empty values.",
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "direnv",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "direnv:direnv status",
+      "hide": false,
+      "command": "direnv",
+      "args": [
+        "status",
+        "--json",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Shows the current direnv status. Incorrectly shows \"allowed\": 0 for foundRC and loadedRC when using a global allow",
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "direnv",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "direnv:direnv edit .",
+      "hide": false,
+      "command": "direnv",
+      "args": [
+        "edit",
+        ".",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "EDITOR": "code --wait"
+        }
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "detail": "Edit the .envrc file in the current workspace.",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "echo": false,
+        "reveal": "never",
+        "group": "direnv",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    // curl -H "Authorization: token ${GH_TOKEN:?}" -o /dev/null -ILsw "%header{x-oauth-scopes}\n" 'https://api.github.com' | sed 's#, #\n#g'
+    {
+      "label": "github:[token scopes]",
+      "hide": false,
+      "command": "curl",
+      "args": [
+        "-H",
+        "Authorization: token ${env:GH_TOKEN}",
+        "-o",
+        "/dev/null",
+        "-ILsw",
+        "%header{x-oauth-scopes}\n",
+        "https://api.github.com"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "EDITOR": "code --wait"
+        }
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "detail": "Show the token scopes for GH_TOKEN environment variable.",
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "never",
+        "group": "github",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "github:gh auth status",
+      "hide": false,
+      "command": "gh",
+      "args": [
+        "auth",
+        "status",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "EDITOR": "code --wait"
+        }
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "detail": "Show auth status for the GitHub CLI \"gh\".",
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "never",
+        "group": "github",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
   ],
+
   "inputs": [
     {
         "id": "buildx-target",
@@ -196,5 +500,5 @@
         "type": "promptString",
         "default": "talos"
     }
-  ] 
+  ]
 }
