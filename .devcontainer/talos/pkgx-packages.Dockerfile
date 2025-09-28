@@ -30,13 +30,14 @@ ARG pkgm_packages_whitelist=' \
   yj \
   yq \
   '
-  
+
   ARG pkgm_packages_blacklist=' \
   bat \
   biome \
   delta \
   eza \
   fnm \
+  hadolint \
   infracost \
   lazygit \
   pulumi \
@@ -162,6 +163,13 @@ ARG fzf_version='0.62.0'
 ## size: gum is 14M
 # renovate: datasource=github-releases depName=pkgx:gum packageName=charmbracelet/gum
 ARG gum_version='0.16.1'
+## see:  https://github.com/hadolint/hadolint/releases
+## see:  https://pkgx.dev/pkgs/github.com/hadolint/hadolint
+## size: hadolint is 63M
+## note: as of 2025-09-17 the pkgx version of hadolint is heavily out of date
+##       hadolint on pkgx it is still at v2.12.0 (released 2022-09) while the latest is v2.13.1 (released 2025-09)
+# renovate: datasource=github-releases depName=pkgx:hadolint packageName=hadolint/hadolint
+ARG hadolint_version='2.12.0'
 ## see:  https://pkgx.dev/pkgs/stedolan.github.io/jq/
 ## see:  https://github.com/jqlang/jq/releases
 ## size: jq is 3.3M
@@ -275,7 +283,7 @@ for name in "${pkgm_packages_whitelist_array[@]}"; do
     "${name}"
   >&2 printf '=== running "pkgm install %s"\n' \
     "${pkgm_packages[$name]}"
-  
+
   ## note: we use sudo because without it "pkgm" complains as follows:
   ## warning: "warning installing as root; installing via `sudo` is preferred"
   sudo pkgm install \
