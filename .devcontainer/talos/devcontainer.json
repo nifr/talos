@@ -45,6 +45,41 @@
       "type": "bind",
       "source": "${localWorkspaceFolder}/.devcontainer/.secrets/ssh_public_key",
       "target": "/run/secrets/ssh_public_key"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/ATUIN_USERNAME",
+      "target": "/run/secrets/ATUIN_USERNAME"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/ATUIN_PASSWORD",
+      "target": "/run/secrets/ATUIN_PASSWORD"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/ATUIN_KEY",
+      "target": "/run/secrets/ATUIN_KEY"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/CLOUDFLARE_EMAIL",
+      "target": "/run/secrets/CLOUDFLARE_EMAIL"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/CLOUDFLARE_ACCOUNT_ID",
+      "target": "/run/secrets/CLOUDFLARE_ACCOUNT_ID"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/CLOUDFLARE_DNS_API_TOKEN",
+      "target": "/run/secrets/CLOUDFLARE_DNS_API_TOKEN"
+    },
+    {
+      "type": "bind",
+      "source": "${localWorkspaceFolder}/.devcontainer/.secrets/CLOUDFLARE_API_TOKEN",
+      "target": "/run/secrets/CLOUDFLARE_API_TOKEN"
     }
   ],
   "secrets": {
@@ -59,6 +94,18 @@
     "PULUMI_ACCESS_TOKEN": {
       "description": "(required) Pulumi Cloud Access Token, used by Pulumi",
       "documentationUrl": "https://app.pulumi.com/user/settings/tokens"
+    },
+    "CLOUDFLARE_EMAIL": {
+      "description": "(required) Cloudflare API Token, used by Pulumi",
+      "documentationUrl": "https://developers.cloudflare.com/api/tokens/"
+    },
+    "CLOUDFLARE_API_TOKEN": {
+      "description": "(required) Cloudflare API Token, used by Pulumi",
+      "documentationUrl": "https://developers.cloudflare.com/api/tokens/"
+    },
+    "CLOUDFLARE_DNS_API_TOKEN": {
+      "description": "(required) Cloudflare DNS API Token, used by Lego for DNS-01 challenges",
+      "documentationUrl": "https://developers.cloudflare.com/api/tokens/"
     }
   },
   "hostRequirements": {
