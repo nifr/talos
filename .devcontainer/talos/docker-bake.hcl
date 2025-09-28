@@ -99,6 +99,7 @@ target "kubernetes" {
   dockerfile = "kubernetes.Dockerfile"
   contexts = {
     base = "target:pulumi"
+    build-context = "./kubernetes"
   }
 }
 
@@ -135,7 +136,7 @@ target "talos" {
     "${registry}/${name}:latest-${architecture_tag()}",
     "${registry}/${name}:latest-build-${replace(timestamp(),":",".")}",
   ]
-  output = [ 
+  output = [
     "type=docker",
     "type=registry",
   ]
