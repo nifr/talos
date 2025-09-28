@@ -5,7 +5,7 @@ readonly TALOS_IMAGE_VERSION='v1.11.1'
 readonly TALOS_IMAGE_ARCH='arm64' # You can change to arm architecture
 
 # HCloud server architecture can be x86 or arm
-readonly HCLOUD_SERVER_ARCH=$(case "${TALOS_IMAGE_ARCH}" in 'amd64') echo 'x86' ;; 'arm64') echo 'arm' ;; esac) 
+readonly HCLOUD_SERVER_ARCH=$(case "${TALOS_IMAGE_ARCH}" in 'amd64') echo 'x86' ;; 'arm64') echo 'arm' ;; esac)
 
 readonly downloadUrl="https://factory.talos.dev/image/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba/${TALOS_IMAGE_VERSION}/hcloud-${TALOS_IMAGE_ARCH}.raw.xz"
 
