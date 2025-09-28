@@ -25,7 +25,7 @@ ARG esc_architecture="${esc_architecture/amd64/x64}"
 ## example url: https://github.com/pulumi/esc/releases/download/v0.18.0/esc-v0.18.0-linux-arm64.tar.gz
 ARG esc_download_url="https://github.com/pulumi/esc/releases/download/v${esc_version}/esc-v${esc_version}-linux-${esc_architecture}.tar.gz"
 
-ARG crd2pulumi_version='1.7.0'
+ARG crd2pulumi_version='1.5.4'
 ARG crd2pulumi_architecture="${TARGETARCH}"
 ## example url: https://github.com/pulumi/crd2pulumi/releases/download/v1.5.4/crd2pulumi-v1.5.4-linux-amd64.tar.gz
 ARG crd2pulumi_download_url="https://github.com/pulumi/crd2pulumi/releases/download/v${crd2pulumi_version}/crd2pulumi-v${crd2pulumi_version}-linux-${crd2pulumi_architecture}.tar.gz"
