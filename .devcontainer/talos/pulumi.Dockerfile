@@ -2,11 +2,13 @@
 
 ARG debian_codename='trixie'
 ARG base_image="docker.io/library/debian:${debian_codename}-slim"
+# hadolint ignore=DL3006
 FROM "${base_image}" AS base
 
 FROM base
 
 FROM base AS pulumi
+SHELL ["/bin/bash","--noprofile","--norc","-o","nounset","-o","errexit","-o","pipefail","-o","noclobber","-c"]
 ARG TARGETARCH
 ## see https://github.com/pulumi/pulumi/releases
 # renovate: datasource=github-releases depName=pulumi packageName=pulumi/pulumi
@@ -90,7 +92,19 @@ COPY \
   /usr/local/bin/
 
 ENV PULUMI_COPILOT='true'
-ENV PULUMI_EXPERIMENTAL='true'
 ENV PULUMI_SKIP_UPDATE_CHECK='true'
+
+## warning: PULUMI_EXPERIMENTAL can cause errors about mismatches to the preview / execution plan during `pulumi up`
+## see: https://github.com/pulumi/pulumi/issues/11587 (related to PULUMI_EXPERIMENTAL=true)
+## see: https://github.com/pulumi/pulumi/issues/11444 (related to use of --yes with --non-interactive)
+##
+## we experienced such issues with the Pulumi Talos provider.
+## we created Talos secrets, a machine config and finally applied this config as "userData" (cloud-init) to a Hetzner server.
+## Pulumi complained that the dependencies for the "userData" property changed despite correct dependencies being set via "dependsOn".
+## Unsetting PULUMI_EXPERIMENTAL avoided the issue.
+##
+## example:
+##   > error: resource urn:pulumi:[..] violates plan: dependencies for <resourceProperty> changed: added urn:pulumi:[..]
+# ENV PULUMI_EXPERIMENTAL='true'
 
 ## @todo: add back "devcontainer.metadata" label
