@@ -93,7 +93,7 @@
         "--non-interactive",
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}"
       },
       "problemMatcher": [],
       "presentation": {
@@ -117,7 +117,7 @@
         "--non-interactive",
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}"
       },
       "problemMatcher": [],
       "presentation": {
@@ -143,7 +143,7 @@
         "--fully-qualify-stack-names",
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}"
       },
       "problemMatcher": [],
       "presentation": {
@@ -176,7 +176,7 @@
         "-v=9"
       ],
       "options": {
-        "cwd": "${workspaceFolder}",
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}",
         "env": {
           "PULUMI_DEBUG_PROMISE_LEAKS": "true"
         }
@@ -209,7 +209,7 @@
         "--suppress-progress",
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}"
       },
       "problemMatcher": [],
       "presentation": {
@@ -236,7 +236,7 @@
         "--non-interactive",
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}"
       },
       "dependsOn": [
         "pulumi:pulumi login"
@@ -265,7 +265,7 @@
         "--json"
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}"
       },
       "dependsOn": [
         "pulumi:pulumi login"
@@ -499,6 +499,25 @@
         "description": "Buildx target:",
         "type": "promptString",
         "default": "talos"
+    },
+    {
+        "id": "pulumi-stack",
+        "description": "Pulumi stack name:",
+        "type": "pickString",
+        "default": "dev",
+        "options": [
+          "talos-cluster-single-node",
+          "cloudflare",
+        ]
+    },
+    {
+      "id": "pulumi-project",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+          "command": "fd --type=directory --maxdepth=1 --min-depth=1 --no-ignore",
+          "cwd": "${workspaceFolder}/pulumi-projects",
+      }
     }
   ]
 }
