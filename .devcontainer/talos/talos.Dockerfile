@@ -1,18 +1,34 @@
 # check=skip=UndefinedVar,SecretsUsedInArgOrEnv;error=true
 
-ARG base_image='docker.io/library/debian:13-slim'
+ARG debian_codename='trixie'
+ARG base_image="docker.io/library/debian:${debian_codename}-slim"
+# hadolint ignore=DL3006
 FROM "${base_image}" AS base
 
 FROM base
 
+## issue: VSCode complains if RedHat and Pulumi YAML extensions are enabled
+## error: > You have both the Red Hat YAML extension and Pulumi YAML extension enabled. Red Hat YAML conflict with Pulumi YAML code completion.
 ARG _devcontainer_metadata='[{ \
   "customizations": { \
     "vscode": { \
       "extensions": [ \
         "editorconfig.editorconfig", \
         "dotenv.dotenv-vscode", \
-        "MermaidChart.vscode-mermaid-chart", \
+        "mkhl.direnv", \
         "ms-vsliveshare.vsliveshare", \
+\
+        "tamasfe.even-better-toml", \
+\
+        "bierner.markdown-preview-github-styles", \
+        "bierner.markdown-emoji", \
+        "bierner.markdown-checkbox", \
+        "bierner.markdown-yaml-preamble", \
+        "bierner.markdown-footnotes", \
+        "MermaidChart.vscode-mermaid-chart", \
+\
+        "medo64.render-crlf", \
+        "usernamehw.errorlens", \
 \
         "spmeesseman.vscode-taskexplorer", \
         "augustocdias.tasks-shell-input", \
@@ -20,6 +36,7 @@ ARG _devcontainer_metadata='[{ \
         "GitHub.vscode-github-actions", \
 \
         "ms-ossdata.vscode-pgsql", \
+        "qwtel.sqlite-viewer", \
 \
         "ms-playwright.playwright", \
 \
@@ -35,6 +52,7 @@ ARG _devcontainer_metadata='[{ \
 \
         "ms-azuretools.vscode-containers", \
         "docker.docker", \
+        "exiasr.hadolint", \
 \
         "biomejs.biome" \
 \
@@ -51,6 +69,8 @@ ARG _devcontainer_metadata='[{ \
         "editor.renderWhitespace": "all", \
         "editor.renderControlCharacters": true, \
         "editor.renderFinalNewline": "dimmed", \
+\
+        "editor.foldingImportsByDefault": true, \
 \
         "explorer.fileNesting.enabled": true, \
 \
