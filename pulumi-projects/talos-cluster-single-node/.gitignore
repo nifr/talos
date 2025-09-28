@@ -3,3 +3,6 @@
 talosconfig
 kubeconfig
 machineconfig.yaml
+
+# Local Pulumi state
+Pulumi.*.yaml
