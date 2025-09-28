@@ -1,0 +1,29 @@
+{
+    "name": "talos-cluster-single-node",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/bun": "1.2.22",
+        "@types/node": "24.5.2",
+        "typescript": "5.9.2"
+    },
+    "dependencies": {
+        "@pulumi/cloudflare": "6.9.1",
+        "@pulumi/command": "1.1.0",
+        "@pulumi/hcloud": "1.24.0",
+        "@pulumi/kubernetes": "4.23.0",
+        "@pulumi/local": "0.1.6",
+        "@pulumi/pulumi": "3.197.0",
+        "@pulumi/std": "2.2.0",
+        "@pulumiverse/talos": "0.6.0",
+        "@pulumiverse/time": "0.1.1",
+        "yaml": "2.8.1"
+    },
+    "scripts": {
+        "up": "bunx pulumi up --yes --skip-preview --non-interactive --fully-qualify-stack-names --suppress-permalink --suppress-progress --suppress-outputs",
+        "cancel": "bunx pulumi cancel --yes --non-interactive",
+        "destroy": "bunx pulumi destroy --exclude-protected --yes --non-interactive --fully-qualify-stack-names --skip-preview --suppress-outputs --suppress-permalink=true --suppress-progress",
+        "talosconfig": "pulumi stack output --show-secrets 'talosconfig' > talosconfig",
+        "kubeconfig": "bunx pulumi stack output --show-secrets 'kubeconfig' > kubeconfig",
+        "machineconfig": "bunx pulumi stack output --json --show-secrets | jq -r '.talos.machine.configuration.machineConfiguration' > machineconfig.yaml"
+    }
+}

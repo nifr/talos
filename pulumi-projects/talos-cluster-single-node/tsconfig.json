@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "outDir": "bin",
+        "target": "es2020",
+        "module": "commonjs",
+        "moduleResolution": "node10",
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "pretty": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "forceConsistentCasingInFileNames": true,
+
+        "types": [
+            "node",
+            "bun",
+        ]
+    },
+    "typeAcquisition": {
+        "include": [
+            "node",
+            "bun"
+        ]
+    },
+    "files": [
+        "index.ts",
+        "index.d.ts"
+    ]
+}
