@@ -8,7 +8,7 @@
   ],
   "portsAttributes": {
     "*": {
-        "onAutoForward": "ignore"
+      "onAutoForward": "ignore"
     }
   },
   "features": {
@@ -26,12 +26,12 @@
       "source": "/var/run/docker.sock",
       "target": "/var/run/docker-host.sock"
     },
-      {
+    {
       "type": "bind",
       "source": "${localWorkspaceFolder}/.devcontainer/.secrets/GH_TOKEN",
       "target": "/run/secrets/GH_TOKEN"
     },
-      {
+    {
       "type": "bind",
       "source": "${localWorkspaceFolder}/.devcontainer/.secrets/HCLOUD_TOKEN",
       "target": "/run/secrets/HCLOUD_TOKEN"
@@ -109,11 +109,11 @@
     }
   },
   "hostRequirements": {
-		"cpus": 4,
-		"memory": "15gb",
-		"storage": "32gb",
-		"gpu": "optional"
-	},
+    "cpus": 4,
+    "memory": "15gb",
+    "storage": "32gb",
+    "gpu": "optional"
+  },
   "customizations": {
     "codespaces": {
       "repositories": {
