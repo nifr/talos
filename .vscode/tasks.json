@@ -172,6 +172,40 @@
         "--suppress-permalink",
         "--suppress-progress",
         "--copilot",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/pulumi-projects/${input:pulumi-project}",
+        "env": {
+          "PULUMI_DEBUG_PROMISE_LEAKS": "true"
+        }
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "echo": false,
+        "reveal": "always",
+        "group": "pulumi",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "revealProblems": "never",
+        "clear": true
+      }
+    },
+    {
+      "label": "pulumi:pulumi up --debug",
+      "hide": false,
+      "command": "pulumi",
+      "args": [
+        "up",
+        "--non-interactive",
+        "--yes",
+        "--fully-qualify-stack-names",
+        "--continue-on-error",
+        "--suppress-outputs",
+        "--suppress-permalink",
+        "--suppress-progress",
+        "--copilot",
         "--debug",
         "-v=9"
       ],
