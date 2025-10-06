@@ -1,4 +1,12 @@
+target "_base" {
+  platforms = [
+    notequal("true", platform_amd64) ? "" : "linux/amd64",
+    notequal("true", platform_arm64) ? "" : "linux/arm64",
+  ]
+}
+
 target "debian" {
+  inherits = [ "_base" ]
   dockerfile = "debian.Dockerfile"
   args = {
     base_image = "docker.io/library/debian:13-slim"
@@ -6,6 +14,7 @@ target "debian" {
 }
 
 target "pkgx" {
+  inherits = [ "_base" ]
   dockerfile = "pkgx.Dockerfile"
   contexts = {
     "base" = "target:debian"
@@ -13,6 +22,7 @@ target "pkgx" {
 }
 
 target "pkgx-packages" {
+  inherits = [ "_base" ]
   dockerfile = "pkgx-packages.Dockerfile"
   contexts = {
     "base" = "target:pkgx"
@@ -20,6 +30,7 @@ target "pkgx-packages" {
 }
 
 target "s6-overlay" {
+  inherits = [ "_base" ]
   dockerfile = "s6-overlay.Dockerfile"
   contexts = {
     "base" = "target:pkgx-packages"
@@ -27,6 +38,7 @@ target "s6-overlay" {
 }
 
 target "process-compose" {
+  inherits = [ "_base" ]
   dockerfile = "process-compose.Dockerfile"
   contexts = {
     "base" = "target:s6-overlay"
@@ -35,6 +47,7 @@ target "process-compose" {
 }
 
 target "docker-in-docker" {
+  inherits = [ "_base" ]
   dockerfile = "docker-in-docker.Dockerfile"
   contexts = {
     "base" = "target:process-compose"
@@ -43,6 +56,7 @@ target "docker-in-docker" {
 }
 
 target "javascript" {
+  inherits = [ "_base" ]
   dockerfile = "javascript.Dockerfile"
   contexts = {
     "base" = "target:docker-in-docker"
@@ -51,6 +65,7 @@ target "javascript" {
 }
 
 target "biome" {
+  inherits = [ "_base" ]
   dockerfile = "biome.Dockerfile"
   contexts = {
     "base" = "target:javascript"
@@ -58,6 +73,7 @@ target "biome" {
 }
 
 target "python" {
+  inherits = [ "_base" ]
   dockerfile = "python.Dockerfile"
   contexts = {
     "base" = "target:biome"
@@ -65,6 +81,7 @@ target "python" {
 }
 
 target "postgres" {
+  inherits = [ "_base" ]
   dockerfile = "postgres.Dockerfile"
   contexts = {
     base = "target:python"
@@ -73,6 +90,7 @@ target "postgres" {
 }
 
 target "mcp-toolbox" {
+  inherits = [ "_base" ]
   dockerfile = "mcp-toolbox.Dockerfile"
   contexts = {
     base = "target:postgres"
@@ -81,6 +99,7 @@ target "mcp-toolbox" {
 }
 
 target "pgcli" {
+  inherits = [ "_base" ]
   dockerfile = "pgcli.Dockerfile"
   contexts = {
     base = "target:mcp-toolbox"
@@ -88,6 +107,7 @@ target "pgcli" {
 }
 
 target "pulumi" {
+  inherits = [ "_base" ]
   dockerfile = "pulumi.Dockerfile"
   contexts = {
     base = "target:pgcli"
@@ -96,6 +116,7 @@ target "pulumi" {
 }
 
 target "kubernetes" {
+  inherits = [ "_base" ]
   dockerfile = "kubernetes.Dockerfile"
   contexts = {
     base = "target:pulumi"
@@ -104,6 +125,7 @@ target "kubernetes" {
 }
 
 target "devcontainer" {
+  inherits = [ "_base" ]
   dockerfile = "devcontainer.Dockerfile"
   contexts = {
     base = "target:kubernetes"
@@ -111,7 +133,9 @@ target "devcontainer" {
   }
 }
 
+// docker build bake --progress=plain --no-cache --allow=security.insecure --debug talos
 target "talos" {
+  inherits = [ "_base" ]
   contexts = {
     "base" = "target:devcontainer"
   }
@@ -124,10 +148,6 @@ target "talos" {
   entitlements = [
     "security.insecure",
   ]
-  platforms = [
-    notequal("true", platform_amd64) ? "" : "linux/amd64",
-    notequal("true", platform_arm64) ? "" : "linux/arm64",
-  ]
   labels = {
     "org.opencontainers.image.source" = "https://github.com/nifr/talos"
   }
@@ -138,7 +158,7 @@ target "talos" {
   ]
   output = [
     "type=docker",
-    "type=registry",
+    // "type=registry",
   ]
 }
 
@@ -197,7 +217,7 @@ parameter "architecture_tag" {
     error_message = "architecture_tag must be longer than 4 characters."
   }
   validation {
-    condition = notequal("true", "arm64") ? false : notequal("architecture_tag", "amd64") ? false : notequal("architecture_tag", "multiarch") ? false : true
+    condition = notequal(architecture_tag, "arm64") ? false : notequal(architecture_tag, "amd64") ? false : notequal(architecture_tag, "multiarch") ? false : true
     error_message = "architecture_tag must be amd64, arm64, or multiarch."
   }
 }
