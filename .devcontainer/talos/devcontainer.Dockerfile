@@ -413,6 +413,7 @@ ENV TERMINFO_DIRS='/etc/terminfo:/lib/terminfo:/usr/share/terminfo'
 # renovate: datasource=github-releases depName=hcloud-upload-image packageName=apricote/hcloud-upload-image
 ARG hcloud_upload_image_version='1.1.0'
 ARG hcloud_upload_image_architecture="${TARGETARCH}"
+ARG hcloud_upload_image_architecture="${hcloud_upload_image_architecture/amd64/x86_64}"
 ## example url: https://github.com/apricote/hcloud-upload-image/releases/download/v1.1.0/hcloud-upload-image_Linux_arm64.tar.gz
 ARG hcloud_upload_image_download_url="https://github.com/apricote/hcloud-upload-image/releases/download/v${hcloud_upload_image_version}/hcloud-upload-image_Linux_${hcloud_upload_image_architecture}.tar.gz"
 RUN \
@@ -449,6 +450,7 @@ INSTALL_GREENMASK
 
 ARG hadolint_version='2.13.1'
 ARG hadolint_architecture="${TARGETARCH}"
+ARG hadolint_architecture="${hadolint_architecture/amd64/x86_64}"
 ## example url: https://github.com/hadolint/hadolint/releases/download/v2.13.1/hadolint-linux-arm64
 ARG hadolint_download_url="https://github.com/hadolint/hadolint/releases/download/v${hadolint_version}/hadolint-linux-${hadolint_architecture}"
 RUN \
