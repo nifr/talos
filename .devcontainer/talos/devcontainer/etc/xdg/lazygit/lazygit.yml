@@ -2,6 +2,9 @@
 ## see: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 disableStartupPopups: true
 
+## do not prompt to return to lazygit after running a subprocess (e.g. git commit)
+promptToReturnFromSubprocess: false
+
 ## disable periodic update checks
 update:
   method: 'never'
