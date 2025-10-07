@@ -7,6 +7,12 @@
     "--name=devcontainer-nifr-talos-${devcontainerId}",
     "--privileged"
   ],
+  "containerEnv": {
+    "SSH_AUTH_SOCK": "/run/host-services/ssh-auth.sock"
+  },
+  "remoteEnv": {
+    "SSH_AUTH_SOCK": "/run/host-services/ssh-auth.sock"
+  },
   "portsAttributes": {
     "*": {
       "onAutoForward": "ignore"
@@ -22,6 +28,11 @@
     }
   },
   "mounts": [
+    {
+      "type": "bind",
+      "source": "/run/host-services/ssh-auth.sock",
+      "target": "/run/host-services/ssh-auth.sock"
+    },
     {
       "type": "bind",
       "source": "/var/run/docker.sock",
