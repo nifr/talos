@@ -31,6 +31,11 @@ jobs:
           ## - urn:pulumi:token-type:access_token:team
           ## - urn:pulumi:token-type:access_token:organization
           requested-token-type: urn:pulumi:token-type:access_token:personal
+          ## scope can be one of:
+          ## - user:<pulumi-username> (for personal tokens)
+          ## - team:<pulumi-organization>/<pulumi-team-name> (for team tokens)
+          ## - organization:admin (for organization tokens)
+          scope: 'user:galawork-nfroehlich'
           ## token expiration in seconds
           token-expiration: 300
           ## export-environment-variables=true means PULUMI_ACCESS_TOKEN will be set in the GitHub workflow environment
