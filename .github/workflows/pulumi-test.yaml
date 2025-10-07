@@ -41,10 +41,29 @@ jobs:
           ## export-environment-variables=true means PULUMI_ACCESS_TOKEN will be set in the GitHub workflow environment
           export-environment-variables: true
 
-      - name: Install and inject ESC environment variables
+      - name: Install and inject Galawork AWS ESC environment variables
         uses: pulumi/esc-action@v1
         with:
           environment: 'galawork/aws/staging'
 
+      - name: Get environment variables from 1Password
+        run: echo _PULUMI_ESC_INTEGRATION_1PASSWORD_ENABLED=${_PULUMI_ESC_INTEGRATION_1PASSWORD_ENABLED:-false}'
+
       - name: Get AWS Identity
         run: aws sts get-caller-identity
+
+      - name: Install and inject personal Shell ESC environment variables
+        uses: pulumi/esc-action@v1
+        with:
+          environment: 'galawork-nfroehlich/onepassword/shell'
+
+      - name: Get environment variables from 1Password
+        run: echo _PULUMI_ESC_INTEGRATION_1PASSWORD_ENABLED=${_PULUMI_ESC_INTEGRATION_1PASSWORD_ENABLED:-false}'
+
+      - name: Install and inject AWS RDS environmment variables from AWS Secrets Manager
+        uses: pulumi/esc-action@v1
+        with:
+          environment: 'galawork/aws-rds/staging'
+
+      - name: Get environment variable from AWS Secrets Manager
+        run: 'echo _PULUMI_ESC_INTEGRATION_AWS_SECRETS_MANAGER_ENABLED=${_PULUMI_ESC_INTEGRATION_AWS_SECRETS_MANAGER_ENABLED:-false}'
