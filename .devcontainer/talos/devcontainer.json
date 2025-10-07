@@ -4,6 +4,7 @@
   "overrideCommand": false,
   "runArgs": [
     "--hostname=talos",
+    "--name=devcontainer-nifr-talos-${devcontainerId}",
     "--privileged"
   ],
   "portsAttributes": {
