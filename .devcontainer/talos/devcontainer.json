@@ -5,6 +5,10 @@
   "runArgs": [
     "--hostname=talos",
     "--name=devcontainer-nifr-talos-${devcontainerId}",
+    // Without --privileged, Docker-in-Docker fails with:
+    // [docker] failed to start daemon: Error initializing network controller: error obtaining controller instance: failed to register "bridge" driver: failed to create NAT chain DOCKER: iptables failed: iptables --wait -t nat -N DOCKER: iptables v1.8.11 (legacy): can't initialize iptables table `nat': Permission denied (you must be root)
+    // [docker] Perhaps iptables or your kernel needs to be upgraded.
+    // [docker] (exit status 3)
     "--privileged"
   ],
   "containerEnv": {
