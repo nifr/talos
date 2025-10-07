@@ -127,6 +127,11 @@
     "gpu": "optional"
   },
   "customizations": {
+    "vscode": {
+      "extensions": [
+        "pulumi.pulumi-vscode-tools"
+      ]
+    },
     "codespaces": {
       "repositories": {
         "nifr/*": {
