@@ -1,0 +1,45 @@
+name: Pulumi Test
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+
+env:
+  ESC_ACTION_ENVIRONMENT: galawork/aws/staging
+  ESC_ACTION_EXPORT_ENVIRONMENT_VARIABLES: AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_SESSION_TOKEN
+  ESC_ACTION_OIDC_AUTH: 'true'
+  ESC_ACTION_OIDC_ORGANZATION: 'galawork-nfroehlich'
+  ESC_ACTION_OIDC_REQUESTED_TOKEN_TYPE: urn:pulumi:token-type:access_token:personal
+
+jobs:
+  test_aws_connection:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: pulumi/auth-actions@v1
+        ## see: https://github.com/marketplace/actions/pulumi-auth-action
+        ## see: https://app.pulumi.com/galawork-nfroehlich/oidc-issuers
+        with:
+          ## organization is the pulumi organization name
+          organization: galawork-nfroehlich
+          ## requested-token-type can be one of:
+          ## - urn:pulumi:token-type:access_token:personal (default)
+          ## - urn:pulumi:token-type:access_token:team
+          ## - urn:pulumi:token-type:access_token:organization
+          requested-token-type: urn:pulumi:token-type:access_token:personal
+          ## token expiration in seconds
+          token-expiration: 300
+          ## export-environment-variables=true means PULUMI_ACCESS_TOKEN will be set in the GitHub workflow environment
+          export-environment-variables: true
+
+      - name: Install and inject ESC environment variables
+        uses: pulumi/esc-action@v1
+        with:
+          environment: 'galawork/aws/staging'
+
+      - name: Get AWS Identity
+        run: aws sts get-caller-identity
